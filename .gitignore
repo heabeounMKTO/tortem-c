@@ -1,6 +1,8 @@
+# ---> C
 # Prerequisites
 *.d
-
+build/
+*.ppm
 # Object files
 *.o
 *.ko
@@ -50,3 +52,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
