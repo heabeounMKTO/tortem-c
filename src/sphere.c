@@ -1,11 +1,11 @@
-#include "hitable.h"
 #include "vec.h"
-#include "sphere.h"
 #include <math.h>
 #include "interval.h"
 #include "ray.h"
+#include "hitable.h"
+#include "sphere.h"
 
-HitRecord* hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record) {
+HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record) {
   Vec3 oc = sub_vec3(sphere.center, r.origin);
   double a = len_sq(r.direction);
   double h = dot(r.direction, oc);
@@ -31,6 +31,7 @@ HitRecord* hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record) {
   if (front_face) {
     _nrm = outward_normal;
   } else {
+    // if not front face , reverse the faces to inside 
     _nrm = negate_vec3(outward_normal);
   }
   return new_hit_record(point, _nrm, t, front_face, true);  

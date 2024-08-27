@@ -1,16 +1,21 @@
 #ifndef SPHERE_H
 #define SPHERE_H
-#include "hitable.h"
 #include "vec.h"
 #include "ray.h"
 #include "interval.h"
+#include "hitable.h"
 
 typedef struct {
   Vec3 center;
   double radius;
 } Sphere;
 
-HitRecord* hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record); 
+HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record); 
 
+void free_sphere(Sphere* sphere) {
+  if(sphere != NULL) {
+    free(sphere);
+  }
+}
 
 #endif
