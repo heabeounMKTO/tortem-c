@@ -14,7 +14,7 @@ Camera* new_cam(int image_width, int image_height) {
   double focal_length = 1.0;
   double viewport_height = 2.0;
   double viewport_width = viewport_height * ((double)image_width / image_height);
-  Vec3 camera_center = {0, 0, 0};
+  Vec3 origin = {0, 0, 0};
 
   // Calculate the vectors across the horizontal and down the vertical viewport edges.
   Vec3 viewport_u = {viewport_width, 0, 0};
@@ -27,7 +27,7 @@ Camera* new_cam(int image_width, int image_height) {
   // Calculate the location of the upper left pixel.
   Vec3 viewport_upper_left = sub_vec3(
       sub_vec3(
-          sub_vec3(camera_center, new_vec(0, 0, focal_length)),
+          sub_vec3(origin, new_vec(0, 0, focal_length)),
           div_vec3(viewport_u, double2vec(2.0))
       ),
       div_vec3(viewport_v, double2vec(2.0))
@@ -36,6 +36,15 @@ Camera* new_cam(int image_width, int image_height) {
       viewport_upper_left,
       mul_vec3(double2vec(0.5), add_vec3(pixel_delta_u, pixel_delta_v))
   );
+  Camera* _cam = (Camera*)malloc(sizeof(Camera));
+  _cam->aspect_ratio = aspect_ratio;
+  _cam->image_width = image_width;
+  _cam->image_height = image_height;
+  _cam->origin = origin;
+  _cam->pixel_delta_u=pixel_delta_u;
+  _cam->pixel_delta_v=pixel_delta_v;
+  _cam->pixel00_loc=pixel00_loc;
+  return _cam;
 }
 
 Ray get_ray(Camera* camera, int i, int j) {

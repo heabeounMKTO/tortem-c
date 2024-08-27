@@ -12,10 +12,6 @@ typedef struct {
 
 HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record); 
 
-void free_sphere(Sphere* sphere) {
-  if(sphere != NULL) {
-    free(sphere);
-  }
-}
+void free_sphere(Sphere* sphere);
 
 #endif

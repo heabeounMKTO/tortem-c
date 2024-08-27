@@ -36,3 +36,10 @@ HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord rec
   }
   return new_hit_record(point, _nrm, t, front_face, true);  
 }
+
+void free_sphere(Sphere* sphere) {
+  if(sphere != NULL) {
+    free(sphere);
+  }
+}
+
