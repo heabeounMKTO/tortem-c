@@ -1,6 +1,6 @@
 #include "hitable_list.h"
 #include "vec.h"
-#include "utils.c"
+#include "utils.h"
 #include "camera.h"
 #include "color.h"
 
@@ -14,11 +14,11 @@ Camera* new_cam(int image_width, int image_height) {
   double focal_length = 1.0;
   double viewport_height = 2.0;
   double viewport_width = viewport_height * ((double)image_width / image_height);
-  Vec3 origin = {0, 0, 0};
+  Vec3 origin = {0.0, 0.0, 0.0};
 
   // Calculate the vectors across the horizontal and down the vertical viewport edges.
-  Vec3 viewport_u = {viewport_width, 0, 0};
-  Vec3 viewport_v = {0, -viewport_height, 0};
+  Vec3 viewport_u = {viewport_width, 0.0, 0.0};
+  Vec3 viewport_v = {0.0, -viewport_height, 0.0};
 
   // Calculate the horizontal and vertical delta vectors from pixel to pixel.
   Vec3 pixel_delta_u = div_vec3(viewport_u, int2vec(image_width));
@@ -27,7 +27,7 @@ Camera* new_cam(int image_width, int image_height) {
   // Calculate the location of the upper left pixel.
   Vec3 viewport_upper_left = sub_vec3(
       sub_vec3(
-          sub_vec3(origin, new_vec(0, 0, focal_length)),
+          sub_vec3(origin, new_vec(0.0, 0.0, focal_length)),
           div_vec3(viewport_u, double2vec(2.0))
       ),
       div_vec3(viewport_v, double2vec(2.0))
@@ -74,10 +74,10 @@ void render(Camera* camera, HitableList world, int samples_per_pixel) {
       // ScreenColor col = write_color(ray_col);
       Vec3 pixel_color = {0.0,0.0,0.0};
       for (int sample=0; sample < samples_per_pixel; sample++) {
-        Vec3 _ray_color = ray_color(get_ray(camera, i, j));
+        Vec3 _ray_color = ray_color(get_ray(camera, j, i), &world);
         pixel_color = add_vec3(pixel_color, _ray_color); 
       }
-      ScreenColor col = write_color(pixel_color);
+      ScreenColor col = write_color(mul_vec3(pixel_color, double2vec(pixel_samples_scale)));
       printf("%d %d %d\n", col.r, col.g, col.b);
     }    
   } 

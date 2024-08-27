@@ -1,7 +1,7 @@
 #include "color.h"
+#include "hitable_list.h"
 #include "vec.h"
 #include <stdbool.h>
-
 
 double hit_sphere(Vec3 center , double radius, Ray r) {
   Vec3 oc = sub_vec3(center, r.origin);
@@ -17,7 +17,9 @@ double hit_sphere(Vec3 center , double radius, Ray r) {
 }
 
 
-Vec3 ray_color(Ray r)  {
+Vec3 ray_color(Ray r, HitableList* world)  {
+  Interval ray_interval = {.min=0.001, .max=INFINITY};
+  HitRecord* world_hits = check_world_hits(world, r, ray_interval);
   double t = hit_sphere(new_vec(0.0,0.0,-1.0), 0.5, r);
   if (t > 0.0) {
     Vec3 at = ray_at(r,t);

@@ -16,7 +16,7 @@ typedef struct {
 
 HitRecord* check_world_hits(HitableList* world, Ray r, Interval ray_interval);
 HitableList* init_hit_record_list(size_t initial_capacity);
-bool add_record_to_hitablelist(HitableList* list, Sphere* sphere);
+bool add_sphere_to_hitablelist(HitableList* list, Sphere* sphere);
 void free_hit_record_list(HitableList* list); 
 
 #endif

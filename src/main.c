@@ -2,6 +2,7 @@
 // #include "vec.h"
 // #include "color.h"
 #include "camera.h"
+#include "hitable_list.h"
 
 int main() {
   int image_width = 512;
@@ -32,7 +33,6 @@ int main() {
   //     viewport_upper_left,
   //     mul_vec3(double2vec(0.5), add_vec3(pixel_delta_u, pixel_delta_v))
   // );
-  // printf("P3\n%d %d\n255\n", image_width, image_height);
   // for (int j=0; j < image_height; j++) {
   //   for(int i =0; i < image_width; i++) {
   //     Vec3 pixel_i = mul_vec3(pixel_delta_u, int2vec(i));
@@ -48,5 +48,11 @@ int main() {
   //   }    
   // }
   Camera* cam = new_cam(image_width, image_height);
+  HitableList* world = init_hit_record_list(1); 
+  Sphere sphere1 = {.center=new_vec(0.0,0.0,-1.0), .radius=0.5}; 
+  Sphere* sphere_ptr = &sphere1;
+  add_sphere_to_hitablelist(world, sphere_ptr); 
+  printf("P3\n%d %d\n255\n", image_width, image_height);
+  render(cam, *world, 10);
   return 0;
 }

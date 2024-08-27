@@ -19,7 +19,7 @@ HitableList* init_hit_record_list(size_t initial_capacity) {
 }
 
 
-bool add_record_to_hitablelist(HitableList *list, Sphere* sphere) {
+bool add_sphere_to_hitablelist(HitableList *list, Sphere* sphere) {
   if (list->size == list->capacity) {
     size_t new_capacity = list->capacity * 2;
 
