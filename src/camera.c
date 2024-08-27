@@ -51,7 +51,7 @@ Ray get_ray(Camera* camera, int i, int j) {
   Vec3 offset = sample_sq();
 
   // MAN MADE HORRORS BEYOND MY COMPREHENSION
-  Vec3 pixel_sample = add_vec3(add_vec3(camera->pixel00_loc, mul_vec3(double2vec((double) i + offset.x), camera->pixel_delta_u)), mul_vec3(double2vec((double)i + offset.y), camera->pixel_delta_v));
+  Vec3 pixel_sample = add_vec3(add_vec3(camera->pixel00_loc, mul_vec3(double2vec((double) i + offset.x), camera->pixel_delta_u)), mul_vec3(double2vec((double) j + offset.y), camera->pixel_delta_v));
   // bottom text
   Vec3 ray_origin = camera->origin;
   Vec3 ray_dir = sub_vec3(pixel_sample, ray_origin);
@@ -74,7 +74,7 @@ void render(Camera* camera, HitableList world, int samples_per_pixel) {
       // ScreenColor col = write_color(ray_col);
       Vec3 pixel_color = {0.0,0.0,0.0};
       for (int sample=0; sample < samples_per_pixel; sample++) {
-        Vec3 _ray_color = ray_color(get_ray(camera, j, i), &world);
+        Vec3 _ray_color = ray_color(get_ray(camera, i, j), &world);
         pixel_color = add_vec3(pixel_color, _ray_color); 
       }
       ScreenColor col = write_color(mul_vec3(pixel_color, double2vec(pixel_samples_scale)));

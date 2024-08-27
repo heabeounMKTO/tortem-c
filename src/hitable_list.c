@@ -1,6 +1,7 @@
 #include "hitable_list.h"
 #include "sphere.h"
 #include "hitable.h"
+#include "vec.h"
 
 
 HitableList* init_hit_record_list(size_t initial_capacity) {
@@ -58,6 +59,7 @@ HitRecord* check_world_hits(HitableList* world, Ray r, Interval ray_interval) {
   for (size_t i = 0; i < world->size; i++) {
     Sphere* sphere_ = world->spheres[i];
     HitRecord* hit = sphere_hit(*sphere_, r, ray_interval, *hit_rec);
+    
     if (hit->is_hit) {
       closest_so_far = hit->t;
       hit_rec = hit;

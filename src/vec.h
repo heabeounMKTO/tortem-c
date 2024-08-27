@@ -28,5 +28,9 @@ double len_sq(Vec3 v);
 double length(Vec3 v);
 
 
+Vec3 random_in_unit_sphere();
+Vec3 random_unit_vec3_sphere();
+Vec3 random_on_hemisphere(Vec3 normal);
+
 
 #endif

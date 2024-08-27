@@ -1,7 +1,9 @@
 #include "color.h"
 #include "hitable_list.h"
+#include "interval.h"
 #include "vec.h"
 #include <stdbool.h>
+#include <math.h>
 
 double hit_sphere(Vec3 center , double radius, Ray r) {
   Vec3 oc = sub_vec3(center, r.origin);
@@ -20,18 +22,30 @@ double hit_sphere(Vec3 center , double radius, Ray r) {
 Vec3 ray_color(Ray r, HitableList* world)  {
   Interval ray_interval = {.min=0.001, .max=INFINITY};
   HitRecord* world_hits = check_world_hits(world, r, ray_interval);
-  double t = hit_sphere(new_vec(0.0,0.0,-1.0), 0.5, r);
-  if (t > 0.0) {
-    Vec3 at = ray_at(r,t);
-    Vec3 N = unit_vec(sub_vec3(at, new_vec(0.0,0.0,-1.0))); 
-    return mul_vec3(double2vec(0.5) , new_vec( N.x + 1.0, N.y + 1.0, N.z + 1.0 )); 
+  if(world_hits->is_hit) {
+    Vec3 direction = random_on_hemisphere(world_hits->normal);
+    Ray _r = {.direction=direction, .origin=r.origin};
+    Vec3 _n = ray_color(_r, world);
+    return mul_vec3(new_vec(_n.x, _n.y, _n.z), double2vec(0.5));
+  } else {
+    Vec3 unit_dir = unit_vec(r.direction); 
+    double a = 0.5 * (unit_dir.y + 1.0);
+    Vec3 final_color = mul_vec3(double2vec(1.0 - a), new_vec(1.0, 1.0, 1.0)); 
+    final_color = add_vec3(final_color, mul_vec3(double2vec(a), new_vec(0.5, 0.7, 1.0)));
+    return final_color;
   }
+  // double t = hit_sphere(new_vec(0.0,0.0,-1.0), 0.5, r);
+  // if (t > 0.0) {
+  //   Vec3 at = ray_at(r,t);
+  //   Vec3 N = unit_vec(sub_vec3(at, new_vec(0.0,0.0,-1.0))); 
+  //   return mul_vec3(double2vec(0.5) , new_vec( N.x + 1.0, N.y + 1.0, N.z + 1.0 )); 
+  // }
 
-  Vec3 unit_dir = unit_vec(r.direction); 
-  double a = 0.5 * (unit_dir.y + 1.0);
-  Vec3 final_color = mul_vec3(double2vec(1.0 - a), new_vec(1.0, 1.0, 1.0)); 
-  final_color = add_vec3(final_color, mul_vec3(double2vec(a), new_vec(0.5, 0.7, 1.0)));
-  return final_color;
+  // Vec3 unit_dir = unit_vec(r.direction); 
+  // double a = 0.5 * (unit_dir.y + 1.0);
+  // Vec3 final_color = mul_vec3(double2vec(1.0 - a), new_vec(1.0, 1.0, 1.0)); 
+  // final_color = add_vec3(final_color, mul_vec3(double2vec(a), new_vec(0.5, 0.7, 1.0)));
+  // return final_color;
 }
 
 
@@ -41,9 +55,11 @@ ScreenColor write_color(Vec3 pixel_color) {
   double r = pixel_color.x;
   double g = pixel_color.y;
   double b = pixel_color.z;
-  int rbyte = (int) (255.999 * r);
-  int gbyte = (int) (255.999 * g);
-  int bbyte = (int) (255.999 * b);
+  Interval intensity = {.min=0.0, .max=0.99};
+
+  int rbyte = (int) (255.999 * interval_clamp(intensity, r));
+  int gbyte = (int) (255.999 * interval_clamp(intensity, g));
+  int bbyte = (int) (255.999 * interval_clamp(intensity, b));
   ScreenColor color = { rbyte, gbyte, bbyte };
   return color ;
 }

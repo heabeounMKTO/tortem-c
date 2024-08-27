@@ -1,6 +1,7 @@
 #include <math.h>
 #include "vec.h"
 #include <stdio.h>
+#include "utils.h"
 
 void print_vec(Vec3 v) {
   printf("vec: %f %f %f\n", v.x, v.y, v.z);
@@ -71,6 +72,36 @@ Vec3 unit_vec(Vec3 v) {
 Vec3 int2vec(int i) {
   Vec3 vec = { (double) i, (double) i, (double) i };
   return vec;
+}
+
+Vec3 random_vec3(Interval _range) {
+  Vec3 vec = { random_double_interval(_range), random_double_interval(_range), random_double_interval(_range) };
+  return vec;
+}
+
+
+Vec3 random_in_unit_sphere() {
+  while(true) {
+    Interval _interval = {.min=-1.0, .max=1.0};
+    Vec3 p = random_vec3(_interval);
+    if(len_sq(p) < 1.0) {
+      return p;
+    }
+  }
+}
+
+
+Vec3 random_unit_vec3_sphere() {
+  return unit_vec(random_in_unit_sphere());
+}
+
+Vec3 random_on_hemisphere(Vec3 normal) {
+  Vec3 on_unit_sphere = random_unit_vec3_sphere();
+  if (dot(on_unit_sphere, normal) > 0.0) {
+    return on_unit_sphere;
+  } else {
+    return negate_vec3(on_unit_sphere);
+  }
 }
 
 Vec3 double2vec(double f) {
