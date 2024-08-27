@@ -53,6 +53,8 @@ HitRecord* check_world_hits(HitableList* world, Ray r, Interval ray_interval) {
                                       false, 
                                       false);
   double closest_so_far = ray_interval.max;
+  // this is probably inefficient as fuck
+  // but this is what i can come up with so 
   for (size_t i = 0; i < world->size; i++) {
     Sphere* sphere_ = world->spheres[i];
     HitRecord* hit = sphere_hit(*sphere_, r, ray_interval, *hit_rec);
