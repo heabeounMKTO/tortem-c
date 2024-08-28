@@ -5,7 +5,7 @@
 #include "hitable.h"
 #include "sphere.h"
 
-HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record) {
+HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval) {
   Vec3 oc = sub_vec3(sphere.center, r.origin);
   double a = len_sq(r.direction);
   double h = dot(r.direction, oc);

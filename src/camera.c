@@ -15,16 +15,10 @@ Camera* new_cam(int image_width, int image_height) {
   double viewport_height = 2.0;
   double viewport_width = viewport_height * ((double)image_width / image_height);
   Vec3 origin = {0.0, 0.0, 0.0};
-
-  // Calculate the vectors across the horizontal and down the vertical viewport edges.
   Vec3 viewport_u = {viewport_width, 0.0, 0.0};
   Vec3 viewport_v = {0.0, -viewport_height, 0.0};
-
-  // Calculate the horizontal and vertical delta vectors from pixel to pixel.
   Vec3 pixel_delta_u = div_vec3(viewport_u, int2vec(image_width));
   Vec3 pixel_delta_v = div_vec3(viewport_v, int2vec(image_height));
-
-  // Calculate the location of the upper left pixel.
   Vec3 viewport_upper_left = sub_vec3(
       sub_vec3(
           sub_vec3(origin, new_vec(0.0, 0.0, focal_length)),
@@ -49,7 +43,6 @@ Camera* new_cam(int image_width, int image_height) {
 
 Ray get_ray(Camera* camera, int i, int j) {
   Vec3 offset = sample_sq();
-
   // MAN MADE HORRORS BEYOND MY COMPREHENSION
   Vec3 pixel_sample = add_vec3(add_vec3(camera->pixel00_loc, mul_vec3(double2vec((double) i + offset.x), camera->pixel_delta_u)), mul_vec3(double2vec((double) j + offset.y), camera->pixel_delta_v));
   // bottom text
@@ -60,18 +53,21 @@ Ray get_ray(Camera* camera, int i, int j) {
 }
 
 void render(Camera* camera, HitableList world, int samples_per_pixel) {
-  double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
+   double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
+   (void) (pixel_samples_scale);
    for (int j=0; j < camera->image_height; j++) {
     for(int i =0; i < camera->image_width; i++) {
+
+      /// old code also segfaults when under -100 for sphere positon for some reason.. 
       // Vec3 pixel_i = mul_vec3(camera->pixel_delta_u, int2vec(i));
       // Vec3 pixel_j = mul_vec3(camera->pixel_delta_v, int2vec(j));
       // Vec3 pixel_center = add_vec3(camera->pixel00_loc, pixel_i);
       // pixel_center = add_vec3(pixel_center, pixel_j);
-
-      // Vec3 ray_directon = sub_vec3(pixel_center, camera_center);
-      // Ray ray = { .origin=camera_center, .direction=ray_directon };
-      // Vec3 ray_col = ray_color(ray); 
-      // ScreenColor col = write_color(ray_col);
+      // Vec3 ray_directon = sub_vec3(pixel_center, camera->camera_center);
+      // Vec3 _ray_color = ray_color(get_ray(camera, i, j), &world);
+      // ScreenColor col = write_color(_ray_color);
+      // =========================================
+      
       Vec3 pixel_color = {0.0,0.0,0.0};
       for (int sample=0; sample < samples_per_pixel; sample++) {
         Vec3 _ray_color = ray_color(get_ray(camera, i, j), &world);

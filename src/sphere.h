@@ -10,7 +10,7 @@ typedef struct {
   double radius;
 } Sphere;
 
-HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval, HitRecord record); 
+HitRecord* sphere_hit(Sphere sphere, Ray r, Interval ray_interval); 
 
 void free_sphere(Sphere* sphere);
 

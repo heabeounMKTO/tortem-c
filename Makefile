@@ -1,18 +1,22 @@
 INCLUDE_MATH=-lm
+DEBUG=main_debug
+RELEASE=main
 
 build_dir:
 	mkdir -p build
 
 debug: build_dir
-	clang src/*.c -g -O0 -o build/main_debug ${INCLUDE_MATH}
-
+	gcc -Werror -Wall -Wextra src/*.c -g -O0 -o build/${DEBUG} ${INCLUDE_MATH}
+	gdb build/${DEBUG}
 run: build_dir
-	clang src/*.c -o build/main ${INCLUDE_MATH} 
-	./build/main 
+	gcc -Werror -Wall -Wextra src/*.c -o build/${DEBUG} ${INCLUDE_MATH} 
+	./build/${DEBUG} 
+clean:
+	rm -rf build
 
 img: build_dir
-	clang src/*.c -o build/main ${INCLUDE_MATH} 
-	./build/main > ayy.ppm 
+	gcc  src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 
+	./build/${RELEASE} > ayy.ppm 
 
 release: build_dir
-	clang src/*.c -o build/main ${INCLUDE_MATH} 
+	gcc src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 
