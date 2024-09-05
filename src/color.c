@@ -4,6 +4,18 @@
 #include "vec.h"
 #include <stdbool.h>
 #include <math.h>
+#include "post_process.h"
+
+// // apply ACES color transform .
+// double apply_aces(double col) {
+//     double a = 2.34;
+//     double b = 0.03;
+//     double c= 2.43;
+//     double d= 0.59;
+//     double e = 0.14;
+//     return (col * (a*col +b)) / (col * (c*col+d)+e);
+// }
+
 
 double hit_sphere(Vec3 center , double radius, Ray r) {
   Vec3 oc = sub_vec3(center, r.origin);
@@ -52,9 +64,10 @@ Vec3 ray_color(Ray r, HitableList* world)  {
 // converts double to rgb values for 
 // final display on screen
 ScreenColor write_color(Vec3 pixel_color) {
-  double r = pixel_color.x;
-  double g = pixel_color.y;
-  double b = pixel_color.z;
+  double r = apply_aces(pixel_color.x);
+  double g = apply_aces(pixel_color.y);
+  double b = apply_aces(pixel_color.z);
+  
   Interval intensity = {.min=0.0, .max=0.99};
 
   int rbyte = (int) (255.999 * interval_clamp(intensity, r));

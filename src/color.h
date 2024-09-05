@@ -12,5 +12,6 @@ typedef struct {
 
 ScreenColor write_color(Vec3 pixel_color);
 Vec3 ray_color(Ray r, HitableList* world);
+double apply_aces(double col);
 
 #endif
