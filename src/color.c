@@ -1,4 +1,5 @@
 #include "color.h"
+#include "hitable.h"
 #include "hitable_list.h"
 #include "interval.h"
 #include "vec.h"
@@ -32,20 +33,21 @@ double hit_sphere(Vec3 center , double radius, Ray r) {
 
 
 Vec3 ray_color(Ray r, HitableList* world, int depth)  {
-  if (depth <= 0) {
-    Vec3 unit_dir = unit_vec(r.direction); 
-    double a = 0.5 * (unit_dir.y + 1.0);
-    Vec3 final_color = mul_vec3(double2vec(1.0 - a), new_vec(1.0, 1.0, 1.0)); 
-    final_color = add_vec3(final_color, mul_vec3(double2vec(a), new_vec(0.5, 0.7, 1.0)));
-    return final_color;
-  }
+  // if (depth <= 0) {
+  //   Vec3 unit_dir = unit_vec(r.direction); 
+  //   double a = 0.5 * (unit_dir.y + 1.0);
+  //   Vec3 final_color = mul_vec3(double2vec(1.0 - a), new_vec(1.0, 1.0, 1.0)); 
+  //   final_color = add_vec3(final_color, mul_vec3(double2vec(a), new_vec(0.5, 0.7, 1.0)));
+  //   return final_color;
+  //   // return new_vec(0.0,0.0,0.0);
+  // }
 
   Interval ray_interval = {.min=0.001, .max=INFINITY};
   HitRecord* world_hits = check_world_hits(world, r, ray_interval);
   if(world_hits->is_hit) {
     Vec3 direction = random_on_hemisphere(world_hits->normal);
     Ray _r = {.direction=direction, .origin=r.origin};
-    Vec3 _n = ray_color(_r, world, depth - 1);
+    Vec3 _n = ray_color(_r, world, depth);
     return mul_vec3(new_vec(_n.x, _n.y, _n.z), double2vec(0.5));
   } else {
     Vec3 unit_dir = unit_vec(r.direction); 
@@ -54,6 +56,7 @@ Vec3 ray_color(Ray r, HitableList* world, int depth)  {
     final_color = add_vec3(final_color, mul_vec3(double2vec(a), new_vec(0.5, 0.7, 1.0)));
     return final_color;
   }
+  
 }
 
 
