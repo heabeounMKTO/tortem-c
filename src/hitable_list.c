@@ -65,6 +65,7 @@ HitRecord* check_world_hits(HitableList* world, Ray r, Interval ray_interval) {
       closest_so_far = hit->t;
       hit_rec = hit;
     }
+    free_hit_record(hit);
   }
   return hit_rec;
 }

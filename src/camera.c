@@ -70,7 +70,7 @@ void render(Camera* camera, HitableList world, int samples_per_pixel) {
       
       Vec3 pixel_color = {0.0,0.0,0.0};
       for (int sample=0; sample < samples_per_pixel; sample++) {
-        Vec3 _ray_color = ray_color(get_ray(camera, i, j), &world);
+        Vec3 _ray_color = ray_color(get_ray(camera, i, j), &world, 200);
         pixel_color = add_vec3(pixel_color, _ray_color); 
       }
       ScreenColor col = write_color(mul_vec3(pixel_color, double2vec(pixel_samples_scale)));
