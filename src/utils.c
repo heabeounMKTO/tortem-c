@@ -1,6 +1,7 @@
 #include "interval.h"
 #include <stdlib.h>
 #include <math.h>
+#include "mt1997.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdint.h>

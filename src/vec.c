@@ -1,5 +1,6 @@
 #include <math.h>
 #include "vec.h"
+#include "mt1997.h"
 #include <stdio.h>
 #include "utils.h"
 
@@ -104,7 +105,7 @@ Vec3 random_on_hemisphere(Vec3 normal) {
   }
 }
 
-Vec3 double2vec(double f) {
-  Vec3 vec = { f, f, f };
+Vec3 double2vec(double scalar) {
+  Vec3 vec = { scalar, scalar, scalar };
   return vec;
 }
