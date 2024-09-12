@@ -22,18 +22,21 @@ double hit_sphere(Vec3 center , double radius, Ray r) {
 
 /// Converts ray to normalized color 0.0->1.0
 Vec3 ray_color(Ray r, HitableList* world, int max_depth)  {
-  Interval ray_interval = {.min=0.0, .max=INFINITY};
+  Interval ray_interval = {.min=0.001, .max=INFINITY};
   HitRecord* world_hits = check_world_hits(world, r, ray_interval);
   if (max_depth <= 0) {
+    free_hit_record(world_hits);
     return new_vec(0.0, 0.0, 0.0);
   }
 
   if(world_hits->is_hit) {
-    Vec3 direction = random_on_hemisphere(world_hits->normal);
+    Vec3 direction = add_vec3(random_on_hemisphere(world_hits->normal), random_unit_vec3_sphere());
     Ray _r = {.direction=direction, .origin=r.origin};
     Vec3 _n = ray_color(_r, world, max_depth - 1);
+    free_hit_record(world_hits);
     return mul_vec3(new_vec(_n.x, _n.y, _n.z), double2vec(0.5));
   } else {
+    free_hit_record(world_hits); 
     Vec3 unit_dir = unit_vec(r.direction); 
     double a = 0.5 * (unit_dir.y + 1.0);
     Vec3 final_color = mul_vec3(double2vec(1.0 - a), new_vec(1.0, 1.0, 1.0)); 
@@ -51,6 +54,9 @@ ScreenColor write_color(Vec3 pixel_color) {
   double g = apply_aces(pixel_color.y);
   double b = apply_aces(pixel_color.z);
   
+  // double r = pixel_color.x;
+  // double g = pixel_color.y;
+  // double b = pixel_color.z;
   Interval intensity = {.min=0.0, .max=0.99};
 
   int rbyte = (int) (255.999 * interval_clamp(intensity, r));

@@ -85,7 +85,8 @@ Vec3 random_in_unit_sphere() {
   while(true) {
     Interval _interval = {.min=-1.0, .max=1.0};
     Vec3 p = random_vec3(_interval);
-    if(len_sq(p) < 1.0) {
+    double lensq = len_sq(p); 
+    if(1e-160 < lensq && lensq < 1.0) {
       return p;
     }
   }

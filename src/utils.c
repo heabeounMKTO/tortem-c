@@ -19,9 +19,13 @@ double degrees2rads(double degrees) {
   return degrees * PI / 100;
 }
 
+// double random_double() {
+//   uint64_t rand = random_uint64(&GLOBAL_MT_STATE);
+//   return (rand >> 11) * (1.0/9007199254740992.0);
+// }
 double random_double() {
-  uint64_t rand = random_uint64(&GLOBAL_MT_STATE);
-  return (rand >> 11) * (1.0/9007199254740992.0);
+    uint64_t _r = ((uint64_t)rand() << 32) | rand();
+    return (double) _r / ((uint64_t)RAND_MAX << 32 | RAND_MAX);
 }
 
 double random_double_interval(Interval min_max) {
