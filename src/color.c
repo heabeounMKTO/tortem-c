@@ -7,17 +7,6 @@
 #include <math.h>
 #include "post_process.h"
 
-// // apply ACES color transform .
-// double apply_aces(double col) {
-//     double a = 2.34;
-//     double b = 0.03;
-//     double c= 2.43;
-//     double d= 0.59;
-//     double e = 0.14;
-//     return (col * (a*col +b)) / (col * (c*col+d)+e);
-// }
-
-
 double hit_sphere(Vec3 center , double radius, Ray r) {
   Vec3 oc = sub_vec3(center, r.origin);
   double a = len_sq(r.direction);
@@ -31,14 +20,18 @@ double hit_sphere(Vec3 center , double radius, Ray r) {
   }
 }
 
-
-Vec3 ray_color(Ray r, HitableList* world)  {
+/// Converts ray to normalized color 0.0->1.0
+Vec3 ray_color(Ray r, HitableList* world, int max_depth)  {
   Interval ray_interval = {.min=0.0, .max=INFINITY};
   HitRecord* world_hits = check_world_hits(world, r, ray_interval);
+  if (max_depth <= 0) {
+    return new_vec(0.0, 0.0, 0.0);
+  }
+
   if(world_hits->is_hit) {
     Vec3 direction = random_on_hemisphere(world_hits->normal);
     Ray _r = {.direction=direction, .origin=r.origin};
-    Vec3 _n = ray_color(_r, world, depth);
+    Vec3 _n = ray_color(_r, world, max_depth - 1);
     return mul_vec3(new_vec(_n.x, _n.y, _n.z), double2vec(0.5));
   } else {
     Vec3 unit_dir = unit_vec(r.direction); 

@@ -52,7 +52,7 @@ Ray get_ray(Camera* camera, int i, int j) {
   return final_ray;
 }
 
-void render(Camera* camera, HitableList world, int samples_per_pixel) {
+void render(Camera* camera, HitableList world, int samples_per_pixel, int max_depth) {
    double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
    (void) (pixel_samples_scale);
    for (int j=0; j < camera->image_height; j++) {
@@ -70,11 +70,12 @@ void render(Camera* camera, HitableList world, int samples_per_pixel) {
       
       Vec3 pixel_color = {0.0,0.0,0.0};
       for (int sample=0; sample < samples_per_pixel; sample++) {
-        Vec3 _ray_color = ray_color(get_ray(camera, i, j), &world, 100);
+        Vec3 _ray_color = ray_color(get_ray(camera, i, j), &world, max_depth);
         pixel_color = add_vec3(pixel_color, _ray_color); 
       }
       ScreenColor col = write_color(mul_vec3(pixel_color, double2vec(pixel_samples_scale)));
       printf("%d %d %d\n", col.r, col.g, col.b);
+      fflush(stdout);
     }    
   } 
 }

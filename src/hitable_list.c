@@ -63,7 +63,11 @@ HitRecord* check_world_hits(HitableList* world, Ray r, Interval ray_interval) {
     HitRecord* hit = sphere_hit(*sphere_, r,interval_new(ray_interval.min, closest_so_far));
     if (hit->is_hit) {
       closest_so_far = hit->t;
-      hit_rec = hit;
+      hit_rec->point = hit->point;
+      hit_rec->normal = hit->normal;
+      hit_rec->t = hit->t;
+      hit_rec->front_face = hit->front_face;
+      hit_rec->is_hit = true;
     }
     free_hit_record(hit);
   }

@@ -19,6 +19,6 @@ Ray get_ray(Camera* camera , int i, int j);
 Vec3 sample_sq();
 
 //LESSS GOOO
-void render(Camera* camera, HitableList world, int samples_per_pixel);
+void render(Camera* camera, HitableList world, int samples_per_pixel, int max_depth);
 
 #endif
