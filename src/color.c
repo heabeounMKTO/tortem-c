@@ -20,7 +20,7 @@ double hit_sphere(Vec3 center , double radius, Ray r) {
 
 
 Vec3 ray_color(Ray r, HitableList* world)  {
-  Interval ray_interval = {.min=0.001, .max=INFINITY};
+  Interval ray_interval = {.min=0.0, .max=INFINITY};
   HitRecord* world_hits = check_world_hits(world, r, ray_interval);
   if(world_hits->is_hit) {
     Vec3 direction = random_on_hemisphere(world_hits->normal);

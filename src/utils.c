@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
-
+#include "mt1997.h"
 
 const double PI = 3.1415926535897932385;
 
@@ -19,9 +19,8 @@ double degrees2rads(double degrees) {
 }
 
 double random_double() {
-  // radom in a 0->1
-    uint64_t r = ((uint64_t)rand() << 32) | rand();
-    return (double)r / ((uint64_t)RAND_MAX << 32 | RAND_MAX);
+  uint64_t rand = random_uint64(&GLOBAL_MT_STATE);
+  return (rand >> 11) * (1.0/9007199254740992.0);
 }
 
 double random_double_interval(Interval min_max) {
