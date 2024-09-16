@@ -1,17 +1,11 @@
-#ifndef COLOR_H
-#define COLOR_H
-#include "hitable_list.h"
 #include "vec.h"
-#include "ray.h"
+#include <stdio.h>
+
 
 typedef struct {
-  int r;
-  int g; 
-  int b;
+  int r,g,b;
 } ScreenColor;
 
-ScreenColor write_color(Vec3 pixel_color);
-Vec3 ray_color(Ray r, HitableList* world, int max_depth);
-double apply_aces(double col);
 
-#endif
+ScreenColor write_color(Vec3 pixel_color, short int apply_curve);
+Vec3 apply_aces(Vec3 col);
