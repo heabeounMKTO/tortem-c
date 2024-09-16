@@ -7,7 +7,7 @@ Vec3 ray_color(Ray r) {
   Vec3 unit_dir = vec3_unit(r.direction);
   float a = 0.5f * (vec3y(unit_dir) + 1.0f);
   Vec3 final_color = vec3_mul(vec3_from_float(1.0f - a), vec3_new(1.0f, 1.0f, 1.0f)); 
-  final_color = vec3_add(final_color, vec3_mul(vec3_from_float(a), vec3_new(0.5f, 0.7f, 1.0f)));
+  // final_color = vec3_add(final_color, vec3_mul(vec3_from_float(a), vec3_new(0.5f, 0.7f, 1.0f)));
   return final_color;
 }
 

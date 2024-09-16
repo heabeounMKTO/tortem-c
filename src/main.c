@@ -7,7 +7,7 @@
 
 
 int main() {
-  int IMAGE_WIDTH = 256;
+  int IMAGE_WIDTH = 512;
   int IMAGE_HEIGHT = 256;
   float aspect_ratio = (float) IMAGE_WIDTH / (float) IMAGE_HEIGHT;
   float focal_length = 1.0f;
@@ -34,10 +34,8 @@ int main() {
   printf("P3\n %i %i\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT); 
   for (int j = 0; j < IMAGE_HEIGHT; j++) {
     for (int i =0; i < IMAGE_WIDTH; i++) {
-      Vec3 pixel_i = vec3_mul(pixel_delta_u, vec3_from_int(i));
-      Vec3 pixel_j = vec3_mul(pixel_delta_v, vec3_from_int(j));
-      Vec3 pixel_center = vec3_add(pixel00_loc, pixel_i);
-      pixel_center = vec3_add(pixel_center, pixel_j);
+     Vec3 pixel_center = vec3_add(vec3_add(pixel00_loc, vec3_mul(vec3_from_float((float) i + vec3x(origin)), pixel_delta_u)), vec3_mul(vec3_from_float((float) j + vec3y(origin)), pixel_delta_v));
+  
       Vec3 ray_direction = vec3_sub(pixel_center, origin);
       Ray new_ray = {.origin=origin, .direction=ray_direction};   
       Vec3 _ayy = ray_color(new_ray);
