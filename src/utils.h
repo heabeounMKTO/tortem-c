@@ -4,13 +4,13 @@
 #include <stdbool.h>
 
 typedef struct {
-  double min;
-  double max;
+  float min;
+  float max;
 } Interval;
 
-Interval interval_new(double min, double max);
-bool interval_surrounds(Interval interval, double x);
-float interval_clamp(Interval interval, double threshold);
+Interval interval_new(float min, float max);
+bool interval_surrounds(Interval interval, float x);
+float interval_clamp(Interval interval, float threshold);
 float interval_sizeof(Interval interval);
 
 #endif
