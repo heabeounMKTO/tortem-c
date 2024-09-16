@@ -7,18 +7,6 @@
 #include <math.h>
 #include "post_process.h"
 
-double hit_sphere(Vec3 center , double radius, Ray r) {
-  Vec3 oc = sub_vec3(center, r.origin);
-  double a = len_sq(r.direction);
-  double h = dot(r.direction, oc);
-  double c = len_sq(oc) - (radius * radius);
-  double discriminant = h*h - a*c;
-  if (discriminant < 0) {
-    return -1.0;
-  } else {
-    return (h - sqrt(discriminant)) / a;
-  }
-}
 
 /// Converts ray to normalized color 0.0->1.0
 Vec3 ray_color(Ray r, HitableList* world, int max_depth)  {
@@ -31,6 +19,9 @@ Vec3 ray_color(Ray r, HitableList* world, int max_depth)  {
 
   if(world_hits->is_hit) {
     Vec3 direction = add_vec3(random_on_hemisphere(world_hits->normal), random_unit_vec3_sphere());
+    if (near_zero(direction)) {
+      direction = world_hits->normal;
+    }
     Ray _r = {.direction=direction, .origin=r.origin};
     Vec3 _n = ray_color(_r, world, max_depth - 1);
     free_hit_record(world_hits);
@@ -43,7 +34,6 @@ Vec3 ray_color(Ray r, HitableList* world, int max_depth)  {
     final_color = add_vec3(final_color, mul_vec3(double2vec(a), new_vec(0.5, 0.7, 1.0)));
     return final_color;
   }
-  
 }
 
 

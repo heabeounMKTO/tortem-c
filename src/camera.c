@@ -54,7 +54,7 @@ Ray get_ray(Camera* camera, int i, int j) {
 
 void render(Camera* camera, HitableList world, int samples_per_pixel, int max_depth) {
    double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
-   (void) (pixel_samples_scale);
+  
    for (int j=0; j < camera->image_height; j++) {
     for(int i =0; i < camera->image_width; i++) {
 

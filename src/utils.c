@@ -32,3 +32,4 @@ double random_double_interval(Interval min_max) {
   // Returns a random real in [min,max).
   return min_max.min + (min_max.max - min_max.min) * random_double();
 }
+

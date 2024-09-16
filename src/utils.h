@@ -9,4 +9,6 @@ void seed_random();
 double degrees2rads(double degrees);
 double random_double(); 
 double random_double_interval(Interval min_max); 
+
+
 #endif

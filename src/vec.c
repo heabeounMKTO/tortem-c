@@ -92,7 +92,6 @@ Vec3 random_in_unit_sphere() {
   }
 }
 
-
 Vec3 random_unit_vec3_sphere() {
   return unit_vec(random_in_unit_sphere());
 }
@@ -109,4 +108,10 @@ Vec3 random_on_hemisphere(Vec3 normal) {
 Vec3 double2vec(double scalar) {
   Vec3 vec = { scalar, scalar, scalar };
   return vec;
+}
+
+
+bool near_zero(Vec3 v) {
+  double _s = 1e-8;
+  return ((fabs(v.x) < _s) && (fabs(v.y) < _s) && (fabs(v.z) < _s));
 }

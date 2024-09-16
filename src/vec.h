@@ -6,6 +6,7 @@
 #define VEC_H
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
 
 typedef struct {
   double x;
@@ -27,7 +28,7 @@ double dot(Vec3 v1, Vec3 v2);
 double len_sq(Vec3 v);
 double length(Vec3 v);
 
-
+bool near_zero(Vec3 v);
 Vec3 random_in_unit_sphere();
 Vec3 random_unit_vec3_sphere();
 Vec3 random_on_hemisphere(Vec3 normal);
