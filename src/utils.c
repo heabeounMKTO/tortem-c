@@ -1,9 +1,8 @@
-#include <stdbool.h>
 #include "utils.h"
-
+#include <stdbool.h>
 
 Interval interval_new(double min, double max) {
-  Interval interval = {.min=min, .max=max};
+  Interval interval = {.min = min, .max = max};
   return interval;
 }
 double interval_sizeof(Interval interval) {
@@ -13,7 +12,7 @@ double interval_sizeof(Interval interval) {
 double interval_clamp(Interval interval, double num) {
   if (num < interval.min) {
     return interval.min;
-  } 
+  }
   if (num > interval.max) {
     return interval.max;
   }
