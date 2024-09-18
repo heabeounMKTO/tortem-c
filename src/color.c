@@ -7,13 +7,14 @@
 double hit_sphere(Vec3_d center, double radius, Ray r) {
   Vec3_d oc = vec3d_sub(center, r.origin);
   double a = vec3d_dot(r.direction, r.direction);
-  double b = -2.0 * vec3d_dot(r.direction, oc);
-  double c = vec3d_dot(oc, oc) - radius * radius;
-  double disc = b * b - 4 * a * c;
+  double h = vec3d_dot(r.direction, oc);
+  double c = vec3d_dot(oc,oc) - radius*radius;
+  double disc = h * h -  a * c;
+  
   if (disc < 0.0) {
     return -1.0;
   } else {
-    return (-b - sqrt(disc)) / (2.0 * a);
+    return (h - sqrt(disc)) / a;
   }
 }
 
