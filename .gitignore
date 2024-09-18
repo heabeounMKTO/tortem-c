@@ -1,6 +1,7 @@
 # ---> C
 # Prerequisites
 *.d
+*.txt
 build/
 *.ppm
 # Object files
