@@ -19,7 +19,7 @@ double hit_sphere(Vec3_d center, double radius, Ray r) {
 }
 
 Vec3_d ray_color(Ray r) {
-  double t = hit_sphere(vec3d_new(0.0, 0.0, -1.0), 0.45, r);
+  double t = hit_sphere(vec3d_new(0.0, 0.0, -1.0), 0.24, r);
   if (t > 0.0) {
     Vec3_d at = ray_at(r, t);
     Vec3_d n = vec3d_unit(vec3d_sub(at, vec3d_new(0.0,0.0,-1.0)));
