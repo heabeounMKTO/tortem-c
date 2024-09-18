@@ -343,6 +343,10 @@ Vec3_d vec3d_new(double x, double y, double z) {
   return v;
 }
 
+void vec3d_print(Vec3_d v) {
+  printf("x: %f y: %f z: %f\n", v.x, v.y, v.z);
+}
+
 Vec3_d vec3d_add(Vec3_d v1, Vec3_d v2) {
   Vec3_d v = {.x=v1.x + v2.x , .y=v1.y+v2.y, .z=v1.z + v2.z};
   return v;
@@ -398,7 +402,8 @@ double vec3d_dot(Vec3_d  v1, Vec3_d v2) {
 
 
 double vec3d_length(Vec3_d v) {
-  return sqrt(vec3d_dot(v, v));
+  double dot_v = vec3d_dot(v,v);
+  return sqrt(dot_v);
 }
 
 Vec3_d vec3d_unit(Vec3_d v) {
@@ -470,12 +475,17 @@ Vec3 vec3_sub(Vec3 v1, Vec3 v2) {
 }
 
 float vec3_dot(Vec3 v1, Vec3 v2) {
-  __m128 mul = _mm_mul_ps(v1.data, v2.data);
-  __m128 sum = _mm_hadd_ps(mul, mul);
-  sum = _mm_hadd_ps(sum, sum);
-  float result;
-  _mm_store_ss(&result, sum);
-  return result;
+  // If sse4.1 is available use `_mm_dp_ps` 
+  // which calculates dot prod with a single instruction
+  #ifdef __SSE4_1__
+    #include <smmintrin.h>
+    return _mm_cvtss_f32(_mm_dp_ps(v1.data, v2.data, 0x71));
+  #else
+    __m128 mul = _mm_mul_ps(v1.data, v2.data);
+    __m128 sum = _mm_hadd_ps(mul, mul);
+    sum = _mm_hadd_ps(sum, sum);
+    return _mm_cvtss_f32(sum);
+  #endif
 }
 
 float vec3_length(Vec3 v) {
@@ -484,7 +494,7 @@ float vec3_length(Vec3 v) {
 }
 Vec3 vec3_unit(Vec3 v) {
   float len = vec3_length(v);
-  return vec3_div(vec3_from_float(len), v);
+  return vec3_div(v, vec3_from_float(len));
 }
 
 float vec3x(Vec3 v) { return v.data[0]; }
@@ -541,12 +551,15 @@ Vec3_d vec3d_sub(Vec3_d v1, Vec3_d v2) {
 }
 // using _mm_store_pd causes segfault, 
 // cast to pd128 insyead
+//
+
 double vec3d_dot(Vec3_d v1, Vec3_d v2) {
   __m256d mul = _mm256_mul_pd(v1.data, v2.data);
-  __m256d sum = _mm256_hadd_pd(mul, mul);
-  sum = _mm256_hadd_pd(sum, sum);
+   /* `_mm256_hadd_pd` doesn't work across the 128-bit lanes
+   we use a combination of _mm256_add_pd and _mm256_permute4x64_pd */
+    __m256d sum = _mm256_add_pd(mul, _mm256_permute4x64_pd(mul, 0b01001110));
+    sum = _mm256_add_pd(sum, _mm256_permute4x64_pd(sum, 0b10010011));
   return _mm_cvtsd_f64(_mm256_castpd256_pd128(sum));
-
 }
 
 double vec3d_length(Vec3_d v) {
@@ -556,7 +569,7 @@ double vec3d_length(Vec3_d v) {
 
 Vec3_d vec3d_unit(Vec3_d v) {
   double len = vec3d_length(v);
-  return vec3d_div(vec3d_from_float(len), v);
+  return vec3d_div(v, vec3d_from_float(len));
 }
 
 double vec3d_x(Vec3_d v) { return v.data[0]; }

@@ -4,7 +4,6 @@
 #include "ray.h"
 
 int main() {
-  // debug_vec();
   int IMAGE_WIDTH = 512;
   int IMAGE_HEIGHT = 256;
   double aspect_ratio =(double) IMAGE_WIDTH / (double) IMAGE_HEIGHT; 
