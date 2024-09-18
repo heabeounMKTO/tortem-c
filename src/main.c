@@ -2,46 +2,45 @@
 #include "vec.h"
 #include "color.h"
 #include "ray.h"
-// #define IMAGE_WIDTH 256
-// #define IMAGE_HEIGHT 256
-
 
 int main() {
+  // debug_vec();
   int IMAGE_WIDTH = 512;
   int IMAGE_HEIGHT = 256;
-  float aspect_ratio = (float) IMAGE_WIDTH / (float) IMAGE_HEIGHT;
-  float focal_length = 1.0f;
-  float viewport_height = 2.0f;
-  float viewport_width = viewport_height * aspect_ratio;
-  
-  Vec3 origin = vec3_new(0.0f, 0.0f, 0.0f);
-  Vec3 viewport_u = vec3_new(viewport_width, 0.0f, 0.0f);
-  Vec3 viewport_v = vec3_new(0.0f, -viewport_height, 0.0f); 
-  Vec3 pixel_delta_u = vec3_div(viewport_u, vec3_from_int(IMAGE_WIDTH));
-  Vec3 pixel_delta_v = vec3_div(viewport_v, vec3_from_int(IMAGE_HEIGHT));
-    Vec3 viewport_upper_left = vec3_sub(
-      vec3_sub(
-          vec3_sub(origin, vec3_new(0.0f, 0.0f, focal_length)),
-          vec3_div(viewport_u, vec3_from_float(2.0f))
+  double aspect_ratio =(double) IMAGE_WIDTH / (double) IMAGE_HEIGHT; 
+  double viewport_height = 2.0;
+  double viewport_width = viewport_height * aspect_ratio;
+  double focal_length =  1.0;
+  Vec3_d camera_center = vec3d_new(0.0,0.0,0.0);
+  Vec3_d viewport_u = vec3d_new(viewport_width, 0.0, 0.0);
+  Vec3_d viewport_v = vec3d_new(0.0, -viewport_height, 0.0);
+
+  Vec3_d pixel_delta_u = vec3d_div(viewport_u, vec3d_from_int(IMAGE_WIDTH));
+  Vec3_d pixel_delta_v = vec3d_div(viewport_v, vec3d_from_int(IMAGE_HEIGHT));
+  Vec3_d viewport_upper_left = vec3d_sub(
+      vec3d_sub(
+          vec3d_sub(camera_center, vec3d_new(0.0, 0.0, focal_length)),
+          vec3d_div(viewport_u, vec3d_from_float(2.0))
       ),
-      vec3_div(viewport_v, vec3_from_float(2.0f))
-  );
-  Vec3 pixel00_loc = vec3_add(
-      viewport_upper_left,
-      vec3_mul(vec3_from_float(0.5f), vec3_add(pixel_delta_u, pixel_delta_v))
+      vec3d_div(viewport_v, vec3d_from_float(2.0))
   );
 
-  printf("P3\n %i %i\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT); 
-  for (int j = 0; j < IMAGE_HEIGHT; j++) {
-    for (int i =0; i < IMAGE_WIDTH; i++) {
-     Vec3 pixel_center = vec3_add(vec3_add(pixel00_loc, vec3_mul(vec3_from_float((float) i + vec3x(origin)), pixel_delta_u)), vec3_mul(vec3_from_float((float) j + vec3y(origin)), pixel_delta_v));
   
-      Vec3 ray_direction = vec3_sub(pixel_center, origin);
-      Ray new_ray = {.origin=origin, .direction=ray_direction};   
-      Vec3 _ayy = ray_color(new_ray);
-      // vec3_print(_ayy);
-      ScreenColor _sc = write_color(_ayy, 1);
-      printf("%i %i %i\n", _sc.r , _sc.g , _sc.b);
+  Vec3_d pixel00_loc;
+  pixel00_loc = vec3d_add(viewport_upper_left, 
+                          vec3d_mul(vec3d_from_float(0.5), 
+                                    vec3d_add(pixel_delta_u, pixel_delta_v)));  
+
+  printf("P3\n%i %i\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT); 
+  for (int j = 0; j < IMAGE_HEIGHT; j++) {
+    for (int i =0; i<IMAGE_WIDTH; i++) {
+      Vec3_d pixel_center = vec3d_add(pixel00_loc, vec3d_mul(vec3d_from_int(i), pixel_delta_u));
+      pixel_center = vec3d_add(pixel_center, vec3d_mul(vec3d_from_int(j), pixel_delta_v));
+      Vec3_d ray_dir = vec3d_sub(pixel_center, camera_center);
+      Ray r = {.origin=camera_center, .direction=ray_dir};
+      Vec3_d pixel_color = ray_color(r);
+      ScreenColor wc = write_color(pixel_color, 0);
+      printf("%i %i %i\n", wc.r, wc.g,wc.b);
     }
   }
 }

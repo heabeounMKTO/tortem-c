@@ -2,15 +2,15 @@
 #include "utils.h"
 
 
-Interval interval_new(float min, float max) {
+Interval interval_new(double min, double max) {
   Interval interval = {.min=min, .max=max};
   return interval;
 }
-float interval_sizeof(Interval interval) {
+double interval_sizeof(Interval interval) {
   return interval.max - interval.min;
 }
 
-float interval_clamp(Interval interval, float num) {
+double interval_clamp(Interval interval, double num) {
   if (num < interval.min) {
     return interval.min;
   } 
@@ -20,6 +20,6 @@ float interval_clamp(Interval interval, float num) {
   return num;
 }
 
-bool interval_surrounds(Interval interval, float x) {
+bool interval_surrounds(Interval interval, double x) {
   return interval.min < x && x < interval.max;
 }

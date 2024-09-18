@@ -3,27 +3,27 @@
 #include "color.h"
 
 
-Vec3 ray_color(Ray r) {
-  Vec3 unit_dir = vec3_unit(r.direction);
-  float a = 0.5f * (vec3y(unit_dir) + 1.0f);
-  Vec3 final_color = vec3_mul(vec3_from_float(1.0f - a), vec3_new(1.0f, 1.0f, 1.0f)); 
-  // final_color = vec3_add(final_color, vec3_mul(vec3_from_float(a), vec3_new(0.5f, 0.7f, 1.0f)));
+Vec3_d ray_color(Ray r) {
+  Vec3_d unit_dir = vec3d_unit(r.direction);
+  double a = 0.5 * (vec3d_y(unit_dir) + 1.0);
+  Vec3_d final_color = vec3d_mul(vec3d_from_float(1.0 - a), vec3d_new(1.0,1.0,1.0));
+  final_color = vec3d_add(final_color, vec3d_mul(vec3d_from_float(a), vec3d_new(0.5,0.7,1.0)));
   return final_color;
 }
 
 
 // TODO: refactor into SIMD 
-Vec3 apply_aces(Vec3 col) {
-    float a = 2.34f;
-    float b = 0.03f;
-    float c= 2.43f;
-    float d= 0.59f;
-    float e = 0.14f;
+Vec3_d apply_aces(Vec3_d col) {
+    double a = 2.34;
+    double b = 0.03;
+    double c= 2.43;
+    double d= 0.59;
+    double e = 0.14;
   
-    float _r = (vec3x(col) * (a*vec3x(col) + b)) / (vec3x(col) * (c * vec3x(col) + d ) + e);
-    float _g = (vec3y(col) * (a*vec3y(col) + b)) / (vec3y(col) * (c * vec3y(col) + d ) + e);
-    float _b = (vec3z(col) * (a*vec3z(col) + b)) / (vec3z(col) * (c * vec3z(col) + d ) + e);
-    Vec3 _applied = vec3_new(_r, _g, _b);
+    double _r = (vec3d_x(col) * (a*vec3d_x(col) + b)) / (vec3d_x(col) * (c * vec3d_x(col) + d ) + e);
+    double _g = (vec3d_y(col) * (a*vec3d_y(col) + b)) / (vec3d_y(col) * (c * vec3d_y(col) + d ) + e);
+    double _b = (vec3d_z(col) * (a*vec3d_z(col) + b)) / (vec3d_z(col) * (c * vec3d_z(col) + d ) + e);
+    Vec3_d _applied = vec3d_new(_r, _g, _b);
     return _applied;
 }
 
@@ -31,8 +31,8 @@ Vec3 apply_aces(Vec3 col) {
 // setting `apply_curve` to 1 applies ACES tone curve
 // setting it to anything other than 1 wont apply anything
 // final display on screen
-ScreenColor write_color(Vec3 pixel_color, short int apply_curve) {
-  Vec3 applied_curve;
+ScreenColor write_color(Vec3_d pixel_color, short int apply_curve) {
+  Vec3_d applied_curve;
   if (apply_curve == 1) {
     applied_curve = apply_aces(pixel_color); 
   }
@@ -40,9 +40,9 @@ ScreenColor write_color(Vec3 pixel_color, short int apply_curve) {
     applied_curve = pixel_color;
   }
   Interval intensity = {.min=0.0f, .max=0.99f};
-  int rbyte = (int) (255.99f * interval_clamp(intensity, vec3x(applied_curve)));
-  int gbyte = (int) (255.99f * interval_clamp(intensity, vec3y(applied_curve)));
-  int bbyte = (int) (255.99f * interval_clamp(intensity, vec3z(applied_curve)));
+  int rbyte = (int) (255.99f * interval_clamp(intensity, vec3d_x(applied_curve)));
+  int gbyte = (int) (255.99f * interval_clamp(intensity, vec3d_y(applied_curve)));
+  int bbyte = (int) (255.99f * interval_clamp(intensity, vec3d_z(applied_curve)));
   ScreenColor color = { rbyte, gbyte, bbyte };
   return color ;
 }
