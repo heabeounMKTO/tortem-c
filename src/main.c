@@ -2,10 +2,19 @@
 #include "ray.h"
 #include "vec.h"
 #include <stdio.h>
+#include "hitable_list.h"
+
+#define SAMPLES_PER_PIXEL 10 
 
 int main() {
   int IMAGE_WIDTH = 512;
   int IMAGE_HEIGHT = 256;
+  HitableList* world = init_hit_record_list(1);
+  Sphere sphere1 = { .center=vec3d_new(0.0,0.0,-1.0), .radius=0.5 };
+  Sphere sphere2 = { .center=vec3d_new(0.0,-100.0,-20.0), .radius=100.0 };
+  add_sphere_to_hitablelist(world, &sphere2);
+  add_sphere_to_hitablelist(world, &sphere1);
+
   double aspect_ratio = (double)IMAGE_WIDTH / (double)IMAGE_HEIGHT;
   double viewport_height = 2.0;
   double viewport_width = viewport_height * aspect_ratio;
@@ -29,14 +38,17 @@ int main() {
   printf("P3\n%i %i\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
   for (int j = 0; j < IMAGE_HEIGHT; j++) {
     for (int i = 0; i < IMAGE_WIDTH; i++) {
-      Vec3_d pixel_center =
-          vec3d_add(pixel00_loc, vec3d_mul(vec3d_from_int(i), pixel_delta_u));
-      pixel_center =
-          vec3d_add(pixel_center, vec3d_mul(vec3d_from_int(j), pixel_delta_v));
+      Vec3_d pixel_center = vec3d_add(pixel00_loc, vec3d_mul(vec3d_from_int(i), pixel_delta_u));
+      pixel_center = vec3d_add(pixel_center, vec3d_mul(vec3d_from_int(j), pixel_delta_v));
       Vec3_d ray_dir = vec3d_sub(pixel_center, camera_center);
       Ray r = {.origin = camera_center, .direction = ray_dir};
-      Vec3_d pixel_color = ray_color(r);
-      ScreenColor wc = write_color(pixel_color, 0);
+      Vec3_d final_color = vec3d_from_float(0.0);
+
+      for (int sample =0; sample < SAMPLES_PER_PIXEL; sample++) {
+        Vec3_d pixel_color = ray_color(r, world);
+        final_color = vec3d_add(pixel_color, final_color);
+      }
+      ScreenColor wc = write_color(final_color, 0);
       printf("%i %i %i\n", wc.r, wc.g, wc.b);
     }
   }

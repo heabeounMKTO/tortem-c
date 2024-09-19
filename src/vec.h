@@ -51,7 +51,6 @@ typedef struct {
   float32x4_t data;
 } Vec3;
 
-// using scalar for arm64 vec3d for now
 typedef struct {
   double x,y,z;
 } Vec3_d;
@@ -79,10 +78,14 @@ typedef struct {
 
 void debug_vec();
 
+
+
 /// use scalar operations, 
 /// guaranteed to run on all them platforms
 /// also no SIMD debugging fiasco
 #if HB_VEC_USE_SCALAR
+
+
 // f32 opps
 static inline Vec3 vec3_new(float x, float y, float z) {
  Vec3 v ={ .x=x, .y=y, .z=z };
@@ -374,7 +377,7 @@ static inline Vec3_d vec3d_sub(Vec3_d v1, Vec3_d v2) {
   return sub;
 }
 // using _mm_store_pd causes segfault, 
-// cast to pd128 instead
+// cast to pd128 insyead
 static inline double vec3d_dot(Vec3_d v1, Vec3_d v2) {
   __m256d mul = _mm256_mul_pd(v1.data, v2.data);
    /* `_mm256_hadd_pd` doesn't work across the 128-bit lanes
@@ -478,87 +481,6 @@ static inline Vec3 vec3_unit(Vec3 v) {
   float len = vec3_length(v);
   return vec3_div(vec3_from_float(len), v);
 }
-
-// using scalar for arm64 vec3d for now
-
-static inline Vec3_d vec3d_new(double x, double y, double z) {
-  Vec3_d v = { x ,y ,z };
-  return v;
-}
-
-static inline void vec3d_print(Vec3_d v) {
-  printf("x: %f y: %f z: %f\n", v.x, v.y, v.z);
-}
-
-static inline Vec3_d vec3d_add(Vec3_d v1, Vec3_d v2) {
-  Vec3_d v = {.x=v1.x + v2.x , .y=v1.y+v2.y, .z=v1.z + v2.z};
-  return v;
-}
-
-static inline Vec3_d vec3d_from_float(double f) {
-  Vec3_d v = { f, f, f };
-  return v;
-}
-
-static inline Vec3_d vec3d_from_int(int i) {
-  Vec3_d v = { (double) i, (double) i, (double) i };
-  return v;
-}
-
-static inline Vec3_d vec3d_sub(Vec3_d v1, Vec3_d v2) {
-  Vec3_d v = {.x=v1.x - v2.x , .y=v1.y - v2.y, .z=v1.z - v2.z};
-  return v;
-}
-
-static inline Vec3_d vec3d_mul(Vec3_d v1, Vec3_d v2) {
-  Vec3_d v = {.x=v1.x * v2.x , .y=v1.y * v2.y, .z=v1.z * v2.z};
-  return v;
-}
-
-static inline Vec3_d vec3d_div(Vec3_d v1, Vec3_d v2) {
-    Vec3_d result;
-    if (v2.x != 0.0f) {
-        result.x = v1.x / v2.x;
-    } else {
-        result.x = 0.0f; // Handle division by zero as needed
-    }
-    if (v2.y != 0.0f) {
-        result.y = v1.y / v2.y;
-    } else {
-        result.y = 0.0f; // Handle division by zero as needed
-    }
-    if (v2.z != 0.0f) {
-        result.z = v1.z / v2.z;
-    } else {
-        result.z = 0.0f; // Handle division by zero as needed
-    }
-    return result;
-}
-
-static inline Vec3_d vec3d_negate(Vec3_d v) {
-  Vec3_d neg = { -v.x, -v.y, -v.z };
-  return neg;
-}
-
-static inline double vec3d_dot(Vec3_d  v1, Vec3_d v2) {
-  return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
-}
-
-
-static inline double vec3d_length(Vec3_d v) {
-  double dot_v = vec3d_dot(v,v);
-  return sqrt(dot_v);
-}
-
-static inline Vec3_d vec3d_unit(Vec3_d v) {
-  double len = vec3d_length(v);
-  Vec3_d vec = {len, len,len};
-  return vec3d_div(v, vec);
-}
-
-static inline double vec3d_x(Vec3_d v) { return v.x; }
-static inline double vec3d_y(Vec3_d v) { return v.y; }
-static inline double vec3d_z(Vec3_d v) {return v.z;}
 
 
 #elif __arm__

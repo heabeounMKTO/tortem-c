@@ -12,16 +12,19 @@ inline HitRecord* new_hit_record(Vec3_d point, Vec3_d normal, double t) {
 }
 
 inline void set_front_face(HitRecord* record, const Ray r, const Vec3_d outward_normal){
-  bool front_face = vec3d_dot(r.direction, outward_normal) < 0.0;
-  if (front_face) {
-    record->normal = outward_normal;
-  } else {
+  if(vec3d_dot(r.direction, outward_normal) > 0.0) {
     record->normal = vec3d_negate(outward_normal);
+    record->front_face = false;
+  } else {
+    record->normal = outward_normal;
+    record->front_face = true;
   }
+
 }
 inline void free_hit_record(HitRecord* record) {
-  // avoid double free's lmao
+  // Avoid double free's lmao
   if (record != NULL) {
     free(record);
   }
 }
+
