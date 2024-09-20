@@ -5,6 +5,7 @@
 #include "ray.h"
 #include <stdbool.h>
 #include "utils.h"
+#include "material.h"
 
 typedef struct {
   Vec3_d center;

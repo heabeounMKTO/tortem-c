@@ -1,6 +1,6 @@
 #ifndef INTERVAL_H
 #define INTERVAL_H
-
+#define NEAR_ZERO 1e-8
 
 #include <stdlib.h>
 #include <math.h>
@@ -56,6 +56,11 @@ static inline bool is_nan_vec3d(Vec3_d v) {
 }
 static inline bool is_inf_vec3d(Vec3_d v) {
   return isinf(vec3d_x(v)) || isinf(vec3d_y(v)) || isinf(vec3d_z(v));
+}
+static inline bool check_vec3d_near_zero(Vec3_d v) {
+  return (fabs(vec3d_x(v)) < NEAR_ZERO  
+          && fabs(vec3d_y(v)) < NEAR_ZERO 
+          && fabs(vec3d_z(v)) < NEAR_ZERO);
 }
 
 #endif
