@@ -28,14 +28,10 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
   Interval _inv = interval_new(0.001, INFINITY);
   bool check_w =check_world_hits(world, r, _inv, rec); 
   if (check_w) {
-    Vec3_d direction = random_on_hemisphere(rec->normal);
+    // Vec3_d direction = random_on_hemisphere(rec->normal);
+    Vec3_d direction = vec3d_add(rec->normal,random_unit_vector());
     Ray _temp_ray = {.origin=rec->p, .direction=direction};
     Vec3_d temp_raycol = ray_color(_temp_ray, world, depth-1);
-
-    if (is_nan_vec3d(temp_raycol) || is_inf_vec3d(temp_raycol)) {
-      // fprintf(stderr, "\nInvalid value detected in ray_color\n");
-      return vec3d_from_float(0.0);
-    }
 
     Vec3_d final =vec3d_mul(temp_raycol, vec3d_from_float(0.5));
     free_hit_record(rec);
