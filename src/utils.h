@@ -64,8 +64,15 @@ static inline bool check_vec3d_near_zero(Vec3_d v) {
 static inline Vec3_d vec3d_reflect(Vec3_d v, Vec3_d n) {
   Vec3_d _a = vec3d_mul(vec3d_mul(vec3d_from_float(2.0), vec3d_from_float(vec3d_dot(v,n))), n);
   return vec3d_sub(v, _a);
-
 }
+
+static inline Vec3_d vec3d_refract(const Vec3_d uv, const Vec3_d n, double etai_over_etat) {
+  double cos_theta = fmin(vec3d_dot(vec3d_negate(uv), n), 1.0);
+  Vec3_d r_out_perp = vec3d_mul(vec3d_from_float(etai_over_etat), vec3d_add(uv, vec3d_mul(vec3d_from_float(cos_theta) , n)));
+  Vec3_d r_out_parallel = vec3d_mul(vec3d_from_float(-sqrt(fabs(1.0 - vec3d_lengthsq(r_out_perp)))) ,n);
+  return vec3d_add(r_out_perp , r_out_parallel);
+}
+
 
 #endif
 

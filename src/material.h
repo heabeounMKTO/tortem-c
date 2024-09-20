@@ -8,7 +8,8 @@
 
 typedef enum {
   METAL,
-  LAMBERTIAN
+  LAMBERTIAN,
+  DIELECTRIC,
 } MaterialType;
 
 typedef struct {
@@ -21,11 +22,19 @@ typedef struct {
   double index_of_refraction, fuzz;
 } MetalMaterial;
 
+typedef struct {
+  Vec3_d scatter_dir, albedo;
+  double index_of_refraction;
+} DielectricMaterial;
+
 typedef union {
   MetalMaterial metal;
   LambertianMaterial lambert;
+  DielectricMaterial dielectric;
   MaterialType mat_type;
 } Material;
+
+
 
 Material new_mat(MaterialType mat, Vec3_d color); 
 void determine_material_scatter(Material mat, const Ray r_in,

@@ -43,6 +43,20 @@ void determine_material_scatter(Material mat, const Ray r_in,
       scattered->direction = metal_scatter_dir;
       *attenuation = mat.metal.albedo;
       break;
+    case DIELECTRIC:
+      double ri;
+      if (rec->front_face) {
+        ri = 1.0/mat.dielectric.index_of_refraction;
+      }
+      else {
+        ri = mat.dielectric.index_of_refraction;
+      }
+      Vec3_d unit_direction = vec3d_unit(r_in.direction);
+      Vec3_d refracted = vec3d_refract(unit_direction, rec->normal, ri);
+      scattered->origin = rec->p;
+      scattered->direction = refracted;
+      *attenuation = vec3d_from_float(1.0);
+      break;
     default: 
       abort();
   } 
