@@ -1,5 +1,6 @@
 #include "material.h"
 #include "utils.h"
+#include "vec.h"
 
 
 Material new_mat(MaterialType mat, Vec3_d color) {
@@ -36,8 +37,8 @@ void determine_material_scatter(Material mat, const Ray r_in,
       *attenuation = mat.lambert.albedo;
       break;
     case METAL:
-      // metal is reflected therefore reflect func
       Vec3_d metal_scatter_dir = vec3d_reflect(r_in.direction, rec->normal);      
+      metal_scatter_dir = vec3d_add(vec3d_unit(metal_scatter_dir), vec3d_mul(vec3d_from_float(mat.metal.fuzz), random_unit_vector()));
       scattered->origin = rec->p;
       scattered->direction = metal_scatter_dir;
       *attenuation = mat.metal.albedo;

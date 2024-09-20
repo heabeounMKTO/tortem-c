@@ -18,7 +18,7 @@ typedef struct {
 
 typedef struct {
   Vec3_d scatter_dir, albedo;
-  double index_of_refraction;
+  double index_of_refraction, fuzz;
 } MetalMaterial;
 
 typedef union {

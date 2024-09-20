@@ -28,18 +28,16 @@ return min + (max - min) * (rand() / (double) RAND_MAX);
 
 
 static inline Vec3_d random_unit_vector() {
-    while(true) {
-        Vec3_d p = vec3d_new(
-            random_interval(-1.0, 1.0),
-            random_interval(-1.0, 1.0),
-            random_interval(-1.0, 1.0)
-        );
-        double sq = vec3d_lengthsq(p);
-        if(1e-160 < sq && sq <= 1.0) {
-        return vec3d_unit(p);    
-    } 
-// return vec3d_unit(p);
-        // return vec3d_div(p, vec3d_from_float(sqrt(sq)));
+      while(true) {
+          Vec3_d p = vec3d_new(
+              random_interval(-1.0, 1.0),
+              random_interval(-1.0, 1.0),
+              random_interval(-1.0, 1.0)
+          );
+          double sq = vec3d_lengthsq(p);
+          if(1e-160 < sq && sq <= 1.0) {
+          return vec3d_unit(p);    
+      } 
     }
 }
 
