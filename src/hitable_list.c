@@ -5,13 +5,20 @@
 #include <stdlib.h>
 
 HitableList *init_hit_record_list(size_t initial_capacity) {
-  HitableList *list =
-      (HitableList *)malloc(sizeof(HitableList) * initial_capacity);
+  HitableList *list = (HitableList *)malloc(sizeof(HitableList) * initial_capacity);
+  list->spheres = (Sphere **)malloc(sizeof(Sphere *) * initial_capacity);
   // If malloc fail , we bail
   if (list == NULL) {
     return NULL;
   }
+  if (list->spheres == NULL) {
+    free(list);
+    return NULL;
+  }
+  list->size = 0;
+  list->capacity = initial_capacity;
   return list;
+  
 }
 
 bool check_world_hits(HitableList* world, 
