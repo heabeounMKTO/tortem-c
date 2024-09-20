@@ -63,5 +63,11 @@ static inline bool check_vec3d_near_zero(Vec3_d v) {
           && fabs(vec3d_z(v)) < NEAR_ZERO);
 }
 
+static inline Vec3_d vec3d_reflect(Vec3_d v, Vec3_d n) {
+  Vec3_d _a = vec3d_mul(vec3d_mul(vec3d_from_float(2.0), vec3d_from_float(vec3d_dot(v,n))), n);
+  return vec3d_sub(v, _a);
+
+}
+
 #endif
 

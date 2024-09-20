@@ -1,3 +1,4 @@
+#include "material.h"
 #include "utils.h"
 #include "vec.h"
 #include <stdlib.h>
@@ -15,12 +16,15 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
   }
   HitRecord* rec = (HitRecord*)malloc(sizeof(HitRecord));
   Interval _inv = interval_new(0.001, INFINITY);
-  bool check_w =check_world_hits(world, r, _inv, rec); 
+  Ray scattered;
+  Vec3_d attenuation;
+  bool check_w = check_world_hits(world, r, _inv, rec, attenuation, scattered); 
+
   if (check_w) {
-    Vec3_d direction = vec3d_add(rec->normal,random_unit_vector());
-    Ray _temp_ray = {.origin=rec->p, .direction=direction};
-    Vec3_d temp_raycol = ray_color(_temp_ray, world, depth-1);
-    Vec3_d final =vec3d_mul(temp_raycol, vec3d_from_float(0.35));
+    // Vec3_d direction = vec3d_add(rec->normal,random_unit_vector());
+    // Ray _temp_ray = {.origin=rec->p, .direction=direction};
+    Vec3_d temp_raycol = ray_color(scattered, world, depth-1);
+    Vec3_d final =vec3d_mul(temp_raycol, attenuation);
     free_hit_record(rec);
     return final;
   }

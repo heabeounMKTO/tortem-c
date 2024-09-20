@@ -2,8 +2,9 @@
 #define MATERIAL_H
 
 #include "vec.h"
-#include "hitable.h"
 #include "ray.h"
+#include <stdbool.h>
+#include "hitable.h"
 
 typedef enum {
   METAL,
@@ -26,30 +27,10 @@ typedef union {
   MaterialType mat_type;
 } Material;
 
-
-bool determine_material_scatter(Material mat,
-                                const Ray r,
-                                const HitRecord* rec, 
-                                Vec3_d attenuation, Ray scattered);
-
-static inline Material new_mat(MaterialType mat) {
-  switch(mat) {
-    case METAL:
-      Material _mat_met;
-      _mat_met.mat_type = METAL;
-      return _mat_met;
-    case LAMBERTIAN:
-      Material _mat_lam;
-      _mat_lam.mat_type = LAMBERTIAN;
-      return _mat_lam;
-    default:
-      // if u supply some bullshit 
-      // material that dont exist
-      abort();
-  }
-
-
-}
+Material new_mat(MaterialType mat, Vec3_d color); 
+bool determine_material_scatter(Material mat, const Ray r_in,
+                                const HitRecord *rec,
+                                Vec3_d* attenuation, Ray* scattered); 
 
 
 #endif
