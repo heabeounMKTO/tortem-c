@@ -18,11 +18,9 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
   Interval _inv = interval_new(0.001, INFINITY);
   Ray scattered;
   Vec3_d attenuation;
-  bool check_w = check_world_hits(world, r, _inv, rec, attenuation, scattered); 
+  bool check_w = check_world_hits(world, r, _inv, rec, &attenuation, &scattered); 
 
   if (check_w) {
-    // Vec3_d direction = vec3d_add(rec->normal,random_unit_vector());
-    // Ray _temp_ray = {.origin=rec->p, .direction=direction};
     Vec3_d temp_raycol = ray_color(scattered, world, depth-1);
     Vec3_d final =vec3d_mul(temp_raycol, attenuation);
     free_hit_record(rec);
@@ -37,9 +35,6 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
     return final_color;
   }
 }
-
-
-
 
 static inline Vec3_d apply_aces(Vec3_d col) {
   double a = 2.34;

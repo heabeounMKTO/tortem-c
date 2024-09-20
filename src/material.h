@@ -28,7 +28,7 @@ typedef union {
 } Material;
 
 Material new_mat(MaterialType mat, Vec3_d color); 
-bool determine_material_scatter(Material mat, const Ray r_in,
+void determine_material_scatter(Material mat, const Ray r_in,
                                 const HitRecord *rec,
                                 Vec3_d* attenuation, Ray* scattered); 
 

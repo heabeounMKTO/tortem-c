@@ -18,7 +18,7 @@ bool add_record_to_hitablelist(HitableList* list, HitRecord* record);
 bool check_world_hits(HitableList* world, 
                       Ray r,Interval interval, 
                       HitRecord* hit_rec, 
-                      Vec3_d attenuation, Ray scattered);
+                      Vec3_d* attenuation, Ray* scattered);
 void free_hit_record_list(HitableList* list); 
 
 
