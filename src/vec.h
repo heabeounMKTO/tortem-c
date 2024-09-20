@@ -96,6 +96,10 @@ static inline void vec3_print(Vec3 v) {
   printf("x: %f y: %f z: %f", v.x, v.y, v.z);
 }
 
+static inline float vec3_lengthsq( Vec3 v) {
+  return (v.x*v.x) + (v.y * v.y) + (v.z * v.z);
+}
+
 static inline Vec3 vec3_from_float(float f) {
   Vec3 v = { f, f, f };
   return v;
@@ -169,6 +173,9 @@ static inline Vec3_d vec3d_new(double x, double y, double z) {
   return v;
 }
 
+static inline double vec3d_lengthsq( Vec3_d v) {
+  return (v.x*v.x) + (v.y * v.y) + (v.z * v.z);
+}
 static inline void vec3d_print(Vec3_d v) {
   printf("x: %f y: %f z: %f\n", v.x, v.y, v.z);
 }
@@ -315,8 +322,7 @@ static inline float vec3_dot(Vec3 v1, Vec3 v2) {
 }
 
 static inline float vec3_length(Vec3 v) {
-  float dot_v = vec3_dot(v, v);
-  return sqrtf(dot_v);
+  return sqrtf(v);
 }
 
 static inline Vec3 vec3_unit(Vec3 v) {
@@ -388,8 +394,7 @@ static inline double vec3d_dot(Vec3_d v1, Vec3_d v2) {
 }
 
 static inline double vec3d_length(Vec3_d v) {
-  double dot_v = vec3d_dot(v, v);
-  return sqrtf(dot_v);
+  return sqrt(v);
 }
 
 static inline Vec3_d vec3d_unit(Vec3_d v) {

@@ -1,3 +1,4 @@
+#include "utils.h"
 #include "vec.h"
 #include <stdlib.h>
 #include "ray.h"
@@ -9,12 +10,37 @@ typedef struct {
 } ScreenColor;
 
 
-static inline Vec3_d ray_color(const Ray r, HitableList* world) {
+// Vec3_d ray_color(const Ray r, HitableList* world, int depth); 
+
+static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
+  
+  // static int max_recursion = 0;
+  // if (depth > max_recursion) {
+  //   max_recursion = depth;
+  //   fprintf(stderr, "\nMax recursion depth: %d", max_recursion);
+  //   fflush(stderr);
+  // }
+
+  if (depth <= 0) {
+    return vec3d_from_float(0.0);
+  }
   HitRecord* rec = (HitRecord*)malloc(sizeof(HitRecord));
   Interval _inv = interval_new(0.001, INFINITY);
   bool check_w =check_world_hits(world, r, _inv, rec); 
   if (check_w) {
-    return vec3d_mul(vec3d_add(rec->normal , vec3d_from_float(1.0)), vec3d_from_float(0.5));
+    Vec3_d direction = random_on_hemisphere(rec->normal);
+    Ray _temp_ray = {.origin=rec->p, .direction=direction};
+    Vec3_d temp_raycol = ray_color(_temp_ray, world, depth-1);
+
+    if (is_nan_vec3d(temp_raycol) || is_inf_vec3d(temp_raycol)) {
+      // fprintf(stderr, "\nInvalid value detected in ray_color\n");
+      return vec3d_from_float(0.0);
+    }
+
+    Vec3_d final =vec3d_mul(temp_raycol, vec3d_from_float(0.5));
+    free_hit_record(rec);
+    return final;
+    // return vec3d_mul(vec3d_add(rec->normal , vec3d_from_float(1.0)), vec3d_from_float(0.5));
   }
   else {
     free_hit_record(rec);
@@ -25,6 +51,9 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world) {
     return final_color;
   }
 }
+
+
+
 
 static inline Vec3_d apply_aces(Vec3_d col) {
   double a = 2.34;
@@ -50,13 +79,13 @@ static inline ScreenColor write_color(Vec3_d pixel_color, short int apply_curve)
   } else {
     applied_curve = pixel_color;
   }
-  Interval intensity = {.min = 0.0f, .max = 0.99f};
+  const Interval intensity = {.min = 0.0f, .max = 0.99f};
   const int rbyte =
-      (int)(255.99f * interval_clamp(intensity, vec3d_x(applied_curve)));
+      (short int)(255.99f * interval_clamp(intensity, vec3d_x(applied_curve)));
   const int gbyte =
-      (int)(255.99f * interval_clamp(intensity, vec3d_y(applied_curve)));
+      (short int)(255.99f * interval_clamp(intensity, vec3d_y(applied_curve)));
   const int bbyte =
-      (int)(255.99f * interval_clamp(intensity, vec3d_z(applied_curve)));
+      (short int)(255.99f * interval_clamp(intensity, vec3d_z(applied_curve)));
   ScreenColor color = {rbyte, gbyte, bbyte};
   return color;
 }

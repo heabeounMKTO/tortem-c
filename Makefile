@@ -10,7 +10,7 @@ build_dir:
 	mkdir -p build
 
 debug: build_dir
-	gcc -march=native -Werror -Wall -Wextra src/*.c -g -O0 -o build/${DEBUG} ${INCLUDE_MATH}
+	gcc -DHB_VEC_SCALAR -Werror -Wall -Wextra src/*.c -g -O0 -o build/${DEBUG} ${INCLUDE_MATH}
 	gdb build/${DEBUG}
 
 run: build_dir

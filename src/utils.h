@@ -3,8 +3,9 @@
 
 
 #include <stdlib.h>
+#include <math.h>
 #include <stdbool.h>
-
+#include "vec.h"
 
 // Two numbers with extra steps
 typedef struct {
@@ -22,9 +23,40 @@ static inline double random_double() {
 }
 
 static inline double random_interval(double min, double max) {
-  return min + (max-min) * random_double();
+return min + (max - min) * (rand() / (double) RAND_MAX);
 }
 
+
+static inline Vec3_d random_unit_vector() {
+    while(true) {
+        Vec3_d p = vec3d_new(
+            random_interval(-1.0, 1.0),
+            random_interval(-1.0, 1.0),
+            random_interval(-1.0, 1.0)
+        );
+        double sq = vec3d_lengthsq(p);
+        if(1e-160 < sq && sq <= 1.0) {
+        return vec3d_unit(p);    
+    } 
+// return vec3d_unit(p);
+        // return vec3d_div(p, vec3d_from_float(sqrt(sq)));
+    }
+}
+
+static inline Vec3_d random_on_hemisphere(Vec3_d normal) {
+  Vec3_d on_unit_sphere = random_unit_vector();
+  if (vec3d_dot(on_unit_sphere, normal) > 0.0) {
+    return on_unit_sphere;
+  } else {
+    return vec3d_negate(on_unit_sphere);
+  }
+}
+static inline bool is_nan_vec3d(Vec3_d v) {
+  return isnan(vec3d_x(v)) || isnan(vec3d_y(v)) || isnan(vec3d_z(v));
+}
+static inline bool is_inf_vec3d(Vec3_d v) {
+  return isinf(vec3d_x(v)) || isinf(vec3d_y(v)) || isinf(vec3d_z(v));
+}
 
 #endif
 

@@ -1,4 +1,5 @@
 #include "hitable_list.h"
+#include <time.h>
 #include "ray.h"
 #include "utils.h"
 #include "vec.h"
@@ -30,14 +31,19 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
   Vec3_d offset = sample_square();
   Vec3_d pixel_sample = vec3d_add(vec3d_add(pixel00_loc, vec3d_mul(vec3d_from_float((double) i + vec3d_x(offset)), pixel_delta_u)), vec3d_mul(vec3d_from_float((double) j + vec3d_y(offset)), pixel_delta_v));
   Vec3_d ray_origin = camera->camera_center;
-  Vec3_d ray_dir = vec3d_sub(pixel_sample, ray_origin);
+  Vec3_d ray_dir = vec3d_unit(vec3d_sub(pixel_sample, ray_origin));
   Ray final_ray = {.origin=ray_origin, .direction=ray_dir};
   return final_ray;
 }
 
 
 
-static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel) {
+static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth) {
+  // render timeout debug
+  // time_t start_time = time(NULL);
+  // const int timeout_seconds = 200; // 5 minutes timeout
+
+
   double aspect_ratio = (double) cam->width / (double) cam->height;
   double viewport_width = cam->viewport_height * aspect_ratio;
   Vec3_d viewport_u = vec3d_new(viewport_width, 0.0, 0.0);
@@ -63,11 +69,12 @@ static inline void render(CameraSettings* cam, HitableList* world, int samples_p
     for (int i = 0; i < cam->width; i++) {
       Vec3_d pixel_color = vec3d_from_float(0.0);
       for (int sample = 0; sample < samples_per_pixel; sample++ ) {
-        Vec3_d _ray_color = ray_color(get_ray(cam,pixel00_loc, pixel_delta_u, pixel_delta_v, i, j), world);
+        Vec3_d _ray_color = ray_color(get_ray(cam,pixel00_loc, pixel_delta_u, pixel_delta_v, i, j), world, max_depth);
         pixel_color = vec3d_add(pixel_color, _ray_color);
       }
-      ScreenColor col = write_color(vec3d_mul(pixel_color, vec3d_from_float(pixel_samples_scale)), 0);
+      ScreenColor col = write_color(vec3d_mul(pixel_color, vec3d_from_float(pixel_samples_scale)), 1);
       printf("%d %d %d\n", col.r, col.g, col.b);
+
     }
   }
 
