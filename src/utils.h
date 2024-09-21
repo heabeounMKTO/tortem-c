@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include "vec.h"
+#include <jpeglib.h>
 
 // Two numbers with extra steps
 typedef struct {
@@ -64,11 +65,63 @@ static inline bool check_vec3d_near_zero(Vec3_d v) {
           && fabs(vec3d_z(v)) < NEAR_ZERO);
 }
 
-
+/// `https://en.wikipedia.org/wiki/Schlick%27s_approximation`
 static inline double schlicks_approx(double cosine, double ref_idx) {
     double r0 = (1 - ref_idx) / (1 + ref_idx);
     r0 = r0 * r0;
     return r0 + (1 - r0) * pow((1 - cosine), 5);
+}
+
+/// creates a new mf image buffer
+static inline unsigned char* new_img_buffer( int width, int height ) {
+  unsigned char* img_buffer = (unsigned char*)malloc(width * height * 3);
+  if (!img_buffer) {
+    return NULL;
+  }
+  return img_buffer;
+}
+/// refactor SIMD?!
+static inline void store_pixel_in_buffer(unsigned char* img_buffer, int pixel_index , int r, int g, int b) {
+  img_buffer[pixel_index] = r; 
+  img_buffer[pixel_index + 1] = g;
+  img_buffer[pixel_index + 2] = b;
+}
+
+
+/// writes image buffer to file, jpeg for now. upon `finishing` frees the image buffer.
+static inline void write_img_buffer(unsigned char* img_buffer, int width, int height) {
+  struct jpeg_compress_struct cinfo;
+  struct jpeg_error_mgr jerr;
+    FILE * outfile;
+    if ((outfile = fopen("output.jpg", "wb")) == NULL) {
+        fprintf(stderr, "Can't open output file\n");
+        free(img_buffer);
+        return;
+    }
+  cinfo.err = jpeg_std_error(&jerr);
+  jpeg_create_compress(&cinfo);
+  jpeg_stdio_dest(&cinfo, outfile);
+  cinfo.image_width = width;
+  cinfo.image_height = height;
+  cinfo.input_components = 3;
+  cinfo.in_color_space = JCS_RGB;
+
+      jpeg_set_defaults(&cinfo);
+    jpeg_set_quality(&cinfo, 100, TRUE);  
+
+    jpeg_start_compress(&cinfo, TRUE);
+
+      JSAMPROW row_pointer[1];
+    while (cinfo.next_scanline < cinfo.image_height) {
+        row_pointer[0] = &img_buffer[cinfo.next_scanline * width * 3];
+        jpeg_write_scanlines(&cinfo, row_pointer, 1);
+    }
+
+    jpeg_finish_compress(&cinfo);
+    fclose(outfile);
+    jpeg_destroy_compress(&cinfo);
+
+    free(img_buffer);
 }
 
 #endif

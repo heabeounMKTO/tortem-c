@@ -34,12 +34,12 @@ clean:
 	rm -rf build
 
 img: build_dir
-	gcc -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 
+	gcc -march=native -ljpeg src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 
 	./build/${RELEASE} > ${OUTPUT_NAME} 
 
 img_sc: build_dir
-	gcc -DHB_VEC_SCALAR -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 
-	./build/${RELEASE} > ${OUTPUT_NAME} 
+	gcc  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -s 
+	./build/${RELEASE}  
 
 release: build_dir
 	gcc src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 
