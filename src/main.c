@@ -1,7 +1,7 @@
 // TODO: refactor materaisl to `new_metal` and `new_lambert`
 
 #include "sphere.h"
-#define SAMPLES_PER_PIXEL 10
+#define SAMPLES_PER_PIXEL 20
 #define RAY_MAX_DEPTH 10
 
 #include "camera.h"
@@ -9,8 +9,8 @@
 #include "material.h"
 
 int main() {
-  int IMAGE_WIDTH = 512;
-  int IMAGE_HEIGHT = 256;
+  int IMAGE_WIDTH = 1024;
+  int IMAGE_HEIGHT = 512;
   Material sphere_m_test = new_lambert_mat(vec3d_new(1.0, 0.5, 0.5));
   Material sphere_m_test2 = new_lambert_mat(vec3d_new(0.5, 0.7, 0.9));
   Material sphere_m_fuzz = new_metal_mat(vec3d_new(0.9, 0.89, 0.9), 0.45);

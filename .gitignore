@@ -2,6 +2,8 @@
 # Prerequisites
 *.d
 *.txt
+*.jpg
+*.jpeg
 build/
 *.ppm
 # Object files
