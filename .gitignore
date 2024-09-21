@@ -4,6 +4,7 @@
 *.txt
 *.jpg
 *.jpeg
+*.png
 build/
 *.ppm
 # Object files

@@ -38,7 +38,7 @@ img: build_dir
 	./build/${RELEASE} > ${OUTPUT_NAME} 
 
 img_sc: build_dir
-	gcc  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -s 
+	gcc  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
 	./build/${RELEASE}  
 
 release: build_dir

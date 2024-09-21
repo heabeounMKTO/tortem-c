@@ -1,6 +1,7 @@
 #include "hitable_list.h"
 #include <jpeglib.h>
 #include <math.h>
+#include <pngconf.h>
 #include <time.h>
 #include "ray.h"
 #include "utils.h"
@@ -49,7 +50,8 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
 
 
 static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth) {
-  unsigned char* IMAGE_BUFFER = new_img_buffer(cam->width, cam->height); 
+  unsigned char* IMAGE_BUFFER = new_jpeg_buffer(cam->width, cam->height); 
+  // png_bytep* IMAGE_BUFFER = new_png_buffer(cam->width, cam->height);
   double aspect_ratio = (double) cam->width / (double) cam->height;
   double viewport_width = cam->viewport_height * aspect_ratio;
   Vec3_d u,v,w; 
@@ -57,10 +59,10 @@ static inline void render(CameraSettings* cam, HitableList* world, int samples_p
   u = vec3d_unit(vec3d_cross(cam->v_up, w));
   v = vec3d_cross(w, u);
 
-  Vec3_d viewport_u = vec3d_scale(u, viewport_width);
-  Vec3_d viewport_v = vec3d_scale(v, - cam->viewport_height);
-  // Vec3_d viewport_u = vec3d_new(viewport_width, 0.0, 0.0);
-  // Vec3_d viewport_v = vec3d_new(0.0, -cam->viewport_height, 0.0);
+  // Vec3_d viewport_u = vec3d_scale(u, viewport_width);
+  // Vec3_d viewport_v = vec3d_scale(v, - cam->viewport_height);
+  Vec3_d viewport_u = vec3d_new(viewport_width, 0.0, 0.0);
+  Vec3_d viewport_v = vec3d_new(0.0, -cam->viewport_height, 0.0);
 
   Vec3_d pixel_delta_u = vec3d_div(viewport_u, vec3d_from_int(cam->width));
   Vec3_d pixel_delta_v = vec3d_div(viewport_v, vec3d_from_int(cam->height));
@@ -86,10 +88,10 @@ static inline void render(CameraSettings* cam, HitableList* world, int samples_p
       }
       ScreenColor col = write_color(vec3d_mul(pixel_color, vec3d_from_float(pixel_samples_scale)), 1);
       int pixel_index = (j * cam->width + i) * 3;
-      store_pixel_in_buffer(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
+      store_pixel_in_buffer_jpeg(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
     }
   }
-  write_img_buffer(IMAGE_BUFFER, cam->width, cam->height);
+  write_img_buffer(IMAGE_BUFFER, cam->width, cam->height, OUTPUT_JPEG);
 }
 
 

@@ -3,8 +3,6 @@
 #include "utils.h"
 #include "vec.h"
 
-
-
 void determine_material_scatter(Material mat, const Ray r_in,
                                 const HitRecord *rec, Vec3_d *attenuation,
                                 Ray *scattered) {
@@ -42,7 +40,7 @@ void determine_material_scatter(Material mat, const Ray r_in,
     bool cannot_refract = ri * sin_theta > 1.0;
 
     Vec3_d direction;
-    if (cannot_refract || schlicks_approx(cos_theta,ri) > random_double()) {
+    if (cannot_refract || schlicks_approx(cos_theta, ri) > random_double()) {
       direction = vec3d_reflect(unit_direction, rec->normal);
       // printf("Reflecting\n");
     } else {
