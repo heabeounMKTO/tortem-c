@@ -1,3 +1,3 @@
 # tortem-c
 
-fuck
+peter shirley's ray tracing in one weekend , but in C 
