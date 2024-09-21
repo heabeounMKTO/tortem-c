@@ -50,11 +50,8 @@ static inline Vec3_d calculate_nishita(Vec3_d ray_dir, Vec3_d sun_dir) {
         vec3d_scale(rayleigh, rayleigh_phase),
         vec3d_scale(mie, mie_phase)
     );
-    
     return vec3d_scale(total_scatter, SUN_INTENSITY);
-
 }
-
 
 
 static inline Vec3_d calculate_sky_color(Vec3_d ray_dir, Vec3_d sun_dir) {

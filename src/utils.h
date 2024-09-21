@@ -53,6 +53,19 @@ static inline Vec3_d random_on_hemisphere(Vec3_d normal) {
     return vec3d_negate(on_unit_sphere);
   }
 }
+
+static inline Vec3_d random_in_unit_disk() {
+  while(true) {
+          Vec3_d p = vec3d_new(
+              random_interval(-1.0, 1.0),
+              random_interval(-1.0, 1.0),
+          0.0      
+          );
+    if(vec3d_lengthsq(p) < 1.0) { return p; }
+    
+  }
+}
+
 static inline double deg2rad(double deg) {
   return deg * 0.0174533;
 }
