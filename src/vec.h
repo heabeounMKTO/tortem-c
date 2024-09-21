@@ -1,6 +1,5 @@
 #ifndef HB_VEC_H
 #define HB_VEC_H
-#define RUAPU_IMPLEMENTATION
 #include <stdio.h>
 #include <math.h>
 
@@ -193,3 +192,5 @@ static inline Vec3_d vec3d_unit(Vec3_d v) {
 static inline double vec3d_x(Vec3_d v) { return v.x; }
 static inline double vec3d_y(Vec3_d v) { return v.y; }
 static inline double vec3d_z(Vec3_d v) {return v.z;}
+
+#endif
