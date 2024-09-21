@@ -26,6 +26,13 @@ void determine_material_scatter(Material mat, const Ray r_in,
                                 const HitRecord *rec,
                                 Vec3_d* attenuation, Ray* scattered) {
   switch(mat.mat_type) {
+    case METAL:
+      Vec3_d metal_scatter_dir = vec3d_reflect(r_in.direction, rec->normal);      
+      metal_scatter_dir = vec3d_add(vec3d_unit(metal_scatter_dir), vec3d_mul(vec3d_from_float(mat.metal.fuzz), random_unit_vector()));
+      scattered->origin = rec->p;
+      scattered->direction = metal_scatter_dir;
+      *attenuation = mat.metal.albedo;
+      break;
     case LAMBERTIAN:
       Vec3_d lambert_scatter_dir = vec3d_add(rec->normal, random_unit_vector());      
       // if near zero , give it back >:(
@@ -35,13 +42,6 @@ void determine_material_scatter(Material mat, const Ray r_in,
       scattered->origin = rec->p;
       scattered->direction = lambert_scatter_dir;
       *attenuation = mat.lambert.albedo;
-      break;
-    case METAL:
-      Vec3_d metal_scatter_dir = vec3d_reflect(r_in.direction, rec->normal);      
-      metal_scatter_dir = vec3d_add(vec3d_unit(metal_scatter_dir), vec3d_mul(vec3d_from_float(mat.metal.fuzz), random_unit_vector()));
-      scattered->origin = rec->p;
-      scattered->direction = metal_scatter_dir;
-      *attenuation = mat.metal.albedo;
       break;
     case DIELECTRIC:
       double ri;

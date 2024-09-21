@@ -19,12 +19,10 @@ int main() {
   Sphere sphere2 = {.center = vec3d_new(0.0, -100.5, -3.5), .radius = 100.0, .sphere_mat=sphere_m_test2};
   Sphere sphere3 = {.center = vec3d_new(0.0, 0.24, -1.0), .radius = 0.5, .sphere_mat=sphere_m_test3};
   Sphere sphere4 = {.center = vec3d_new(-1.2, 0.14, -1.0), .radius = 0.55, .sphere_mat=sphere_m_glass};
-  Sphere sphere5 = {.center = vec3d_new(-1.2, 0.14, 2.0), .radius = 0.35, .sphere_mat=sphere_m_glass};
   add_sphere_to_hitablelist(world, &sphere2);
   add_sphere_to_hitablelist(world, &sphere1);
   add_sphere_to_hitablelist(world, &sphere3);
   add_sphere_to_hitablelist(world, &sphere4);
-  add_sphere_to_hitablelist(world, &sphere5);
 
   CameraSettings *cam = new_camera_settings(IMAGE_WIDTH, IMAGE_HEIGHT, 1.0, 2.0,
                                             vec3d_from_float(0.0));

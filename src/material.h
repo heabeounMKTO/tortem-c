@@ -9,7 +9,7 @@
 typedef enum {
   METAL,
   LAMBERTIAN,
-  DIELECTRIC,
+  DIELECTRIC, // TODO: fix index of refraction bug, causes black
 } MaterialType;
 
 typedef struct {
