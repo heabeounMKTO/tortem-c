@@ -1,4 +1,5 @@
 #include "hitable_list.h"
+#include <math.h>
 #include <time.h>
 #include "ray.h"
 #include "utils.h"
@@ -7,17 +8,23 @@
 
 typedef struct {
   int width, height;
-  double focal_length,viewport_height;
-  Vec3_d camera_center; //Camera origin
+  double focal_length,viewport_height,vfov;
+  Vec3_d camera_center, v_up, look_from, look_at; //Camera origin
 } CameraSettings ;
 
-static inline CameraSettings* new_camera_settings(int width, int height, double focal_length, double viewport_height, Vec3_d camera_center){
+static inline CameraSettings* new_camera_settings(int width, int height, double focal_length, double viewport_height, Vec3_d camera_center, double vfov, Vec3_d look_from, Vec3_d look_at){
   CameraSettings* _cam = (CameraSettings*)malloc(sizeof(CameraSettings));
+  double theta = deg2rad(vfov);
+  double h = tan(theta/2);
   _cam->width = width;
   _cam->height=height;
-  _cam->focal_length=focal_length;
-  _cam->viewport_height=viewport_height;
+  _cam->viewport_height=2.0 * h * focal_length;
   _cam->camera_center=camera_center;
+  _cam->vfov=vfov;
+  _cam->v_up=vec3d_new(0.0, 1.0, 0.0); 
+  _cam->look_from = look_from;
+  _cam->look_at = look_at;
+  _cam->focal_length=vec3d_length(vec3d_sub(_cam->look_from, _cam->look_at));
   return _cam;
 }
 
@@ -39,11 +46,6 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
 
 
 static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth) {
-  // render timeout debug
-  // time_t start_time = time(NULL);
-  // const int timeout_seconds = 200; // 5 minutes timeout
-
-
   double aspect_ratio = (double) cam->width / (double) cam->height;
   double viewport_width = cam->viewport_height * aspect_ratio;
   Vec3_d viewport_u = vec3d_new(viewport_width, 0.0, 0.0);
@@ -60,11 +62,13 @@ static inline void render(CameraSettings* cam, HitableList* world, int samples_p
   pixel00_loc = vec3d_add(viewport_upper_left,
                           vec3d_mul(vec3d_from_float(0.5),
                                     vec3d_add(pixel_delta_u, pixel_delta_v)));
-  
+  Vec3_d u,v,w; 
+  w = vec3d_unit(cam->look_from, cam->look_at);
+  u = vec3d_unit(vec3d_cross(cam->v_up, w));
+  v = vec3d_cross(w, u);
         
   double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
   printf("P3\n%i %i\n255\n", cam->width, cam->height);
-
   for (int j = 0; j < cam->height; j++) {
     for (int i = 0; i < cam->width; i++) {
       Vec3_d pixel_color = vec3d_from_float(0.0);
@@ -74,7 +78,6 @@ static inline void render(CameraSettings* cam, HitableList* world, int samples_p
       }
       ScreenColor col = write_color(vec3d_mul(pixel_color, vec3d_from_float(pixel_samples_scale)), 1);
       printf("%d %d %d\n", col.r, col.g, col.b);
-
     }
   }
 

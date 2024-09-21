@@ -49,6 +49,9 @@ static inline Vec3_d random_on_hemisphere(Vec3_d normal) {
     return vec3d_negate(on_unit_sphere);
   }
 }
+static inline double deg2rad(double deg) {
+  return deg * 0.0174533;
+}
 static inline bool is_nan_vec3d(Vec3_d v) {
   return isnan(vec3d_x(v)) || isnan(vec3d_y(v)) || isnan(vec3d_z(v));
 }
