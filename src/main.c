@@ -2,7 +2,7 @@
 
 #include "sphere.h"
 #include "vec.h"
-#define SAMPLES_PER_PIXEL 80
+#define SAMPLES_PER_PIXEL 100
 #define RAY_MAX_DEPTH 20 
 
 #include "camera.h"
@@ -11,7 +11,7 @@
 
 int main() {
   int IMAGE_WIDTH = 1024;
-  int IMAGE_HEIGHT = 512;
+  int IMAGE_HEIGHT = 1024;
   Material sphere_m_test = new_metal_mat(vec3d_new(0.7, 0.57, 0.67), 0.01);
   Material sphere_m_test2 = new_lambert_mat(vec3d_new(0.5, 0.7, 0.9));
   Material sphere_m_fuzz = new_metal_mat(vec3d_new(0.65, 0.9, 0.9), 0.45);
@@ -40,7 +40,7 @@ int main() {
   // add_sphere_to_hitablelist(world, &sphere_smol2);
   Vec3_d look_from = vec3d_new(-2.0, 2.0, -1.0);
   Vec3_d look_at = vec3d_new(0.0,0.0,-1.0);
-  CameraSettings *cam = new_camera_settings(IMAGE_WIDTH, IMAGE_HEIGHT, 1.0, 2.0,
-                                             90, look_from, look_at);
+  CameraSettings *cam = new_camera_settings(IMAGE_WIDTH, IMAGE_HEIGHT, 2.1, 2.0,
+                                             50, look_from, look_at, 0.01);
   render(cam, world, SAMPLES_PER_PIXEL, RAY_MAX_DEPTH);
 }
