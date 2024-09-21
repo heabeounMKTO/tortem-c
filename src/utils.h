@@ -66,10 +66,16 @@ static inline Vec3_d vec3d_reflect(Vec3_d v, Vec3_d n) {
   return vec3d_sub(v, _a);
 }
 
+static inline double schlicks_approx(double cosine, double ref_idx) {
+    double r0 = (1 - ref_idx) / (1 + ref_idx);
+    r0 = r0 * r0;
+    return r0 + (1 - r0) * pow((1 - cosine), 5);
+}
+
 static inline Vec3_d vec3d_refract(Vec3_d uv, Vec3_d n, double etai_over_etat) {
   double cos_theta = fmin(vec3d_dot(vec3d_negate(uv), n), 1.0);
-  Vec3_d r_out_perp = vec3d_mul(vec3d_from_float(etai_over_etat), vec3d_add(uv, vec3d_mul(vec3d_from_float(cos_theta) , n)));
-  Vec3_d r_out_parallel = vec3d_mul(vec3d_from_float(-sqrt(fabs(1.0 - vec3d_lengthsq(r_out_perp)))) ,n);
+  Vec3_d r_out_perp = vec3d_scale(vec3d_add(uv, vec3d_scale(n, cos_theta)), etai_over_etat);
+  Vec3_d r_out_parallel =  vec3d_scale(n, -sqrt(fabs(1.0 - vec3d_lengthsq(r_out_perp))));  
   return vec3d_add(r_out_perp , r_out_parallel);
 }
 

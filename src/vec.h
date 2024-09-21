@@ -163,6 +163,9 @@ static inline Vec3 vec3_unit(Vec3 v) {
   return vec3_div(v, vec);
 }
 
+static inline Vec3 vec3_scale(Vec3 v, float t) {
+  return (Vec3) { v.x * t, v.y * t, v.z * t };
+}
 static inline float vec3x(Vec3 v) { return v.x; }
 static inline float vec3y(Vec3 v) { return v.y; }
 static inline float vec3z(Vec3 v) {return v.z;}
@@ -238,6 +241,10 @@ static inline double vec3d_dot(Vec3_d  v1, Vec3_d v2) {
 static inline double vec3d_length(Vec3_d v) {
   double dot_v = vec3d_dot(v,v);
   return sqrt(dot_v);
+}
+
+static inline Vec3_d vec3d_scale(Vec3_d v, double t) {
+  return (Vec3_d) { v.x * t, v.y * t, v.z * t };
 }
 
 static inline Vec3_d vec3d_unit(Vec3_d v) {
