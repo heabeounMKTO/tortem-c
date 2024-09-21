@@ -48,24 +48,28 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
 static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth) {
   double aspect_ratio = (double) cam->width / (double) cam->height;
   double viewport_width = cam->viewport_height * aspect_ratio;
-  Vec3_d viewport_u = vec3d_new(viewport_width, 0.0, 0.0);
-  Vec3_d viewport_v = vec3d_new(0.0, -cam->viewport_height, 0.0);
+  Vec3_d u,v,w; 
+  w = vec3d_unit(vec3d_sub(cam->look_from, cam->look_at));
+  u = vec3d_unit(vec3d_cross(cam->v_up, w));
+  v = vec3d_cross(w, u);
+
+  Vec3_d viewport_u = vec3d_mul(vec3d_from_float(viewport_width), u);
+  Vec3_d viewport_v = vec3d_mul(vec3d_from_float(cam->viewport_height), vec3d_negate(v));
+
 
   Vec3_d pixel_delta_u = vec3d_div(viewport_u, vec3d_from_int(cam->width));
   Vec3_d pixel_delta_v = vec3d_div(viewport_v, vec3d_from_int(cam->height));
-  Vec3_d viewport_upper_left = vec3d_sub(
-      vec3d_sub(vec3d_sub(cam->camera_center, vec3d_new(0.0, 0.0, cam->focal_length)),
-                vec3d_div(viewport_u, vec3d_from_float(2.0))),
-      vec3d_div(viewport_v, vec3d_from_float(2.0)));
-
+  // Vec3_d viewport_upper_left = vec3d_sub(
+  //     vec3d_sub(vec3d_sub(cam->camera_center, vec3d_new(0.0, 0.0, cam->focal_length)),
+  //               vec3d_div(viewport_u, vec3d_from_float(2.0))),
+  //     vec3d_div(viewport_v, vec3d_from_float(2.0)));
+  Vec3_d viewport_upper_left = vec3d_sub(cam->camera_center, vec3d_mul(vec3d_from_float(cam->focal_length), w));
+  viewport_upper_left = vec3d_sub(viewport_upper_left, vec3d_scale(viewport_u,2.0));
+  viewport_upper_left = vec3d_sub(viewport_upper_left, vec3d_scale(viewport_v, 2.0));
   Vec3_d pixel00_loc;
   pixel00_loc = vec3d_add(viewport_upper_left,
                           vec3d_mul(vec3d_from_float(0.5),
                                     vec3d_add(pixel_delta_u, pixel_delta_v)));
-  Vec3_d u,v,w; 
-  w = vec3d_unit(cam->look_from, cam->look_at);
-  u = vec3d_unit(vec3d_cross(cam->v_up, w));
-  v = vec3d_cross(w, u);
         
   double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
   printf("P3\n%i %i\n255\n", cam->width, cam->height);
