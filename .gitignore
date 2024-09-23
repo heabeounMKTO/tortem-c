@@ -4,6 +4,7 @@
 *.txt
 *.jpg
 *.jpeg
+*.mp4
 !final.jpeg
 *.png
 build/
