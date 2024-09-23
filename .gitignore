@@ -4,6 +4,7 @@
 *.txt
 *.jpg
 *.jpeg
+!final.jpeg
 *.png
 build/
 *.ppm
