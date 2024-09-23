@@ -21,6 +21,7 @@ Interval interval_new(double min, double max);
 bool interval_surrounds(Interval interval, double x);
 double interval_clamp(Interval interval, double threshold);
 double interval_sizeof(Interval interval);
+Interval interval_expand(Interval interval,double delta);
 
 static inline double random_double() {
   return rand() / (double) (RAND_MAX) + 1.0;

@@ -22,3 +22,8 @@ double interval_clamp(Interval interval, double num) {
 bool interval_surrounds(Interval interval, double x) {
   return interval.min < x && x < interval.max;
 }
+
+Interval interval_expand(Interval interval, double delta) {
+  double padding = delta / 2.0;
+  return (Interval) {.min=interval.min - padding, .max=interval.max + padding};
+}
