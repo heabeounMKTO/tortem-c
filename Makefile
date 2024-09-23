@@ -48,5 +48,9 @@ animation: animation_dir
 	gcc  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
 	./build/${RELEASE}  
 
+mp4_output:
+	ffmpeg -framerate 30 -i animation_output/output%04d.jpg -c:v libx264 -r 30 -pix_fmt yuv420p output_video.mp4
+
+
 release: build_dir
 	gcc src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 

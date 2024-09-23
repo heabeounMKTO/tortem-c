@@ -4,8 +4,8 @@
 #include "hitable_list.h"
 #include "material.h"
 #include "keyframe.h" 
-#define SAMPLES_PER_PIXEL 10
-#define RAY_MAX_DEPTH 25 
+#define SAMPLES_PER_PIXEL 5 
+#define RAY_MAX_DEPTH 10 
 
 
 int main() {
@@ -42,8 +42,7 @@ int main() {
   CameraSettings *cam = new_camera_settings(IMAGE_WIDTH, IMAGE_HEIGHT, 2.1, 2.0,
                                              50, look_from, look_at, 0.01);
   #ifdef TORTEM_RENDER_ANIM
-  
-  Keyframe key = keyframe_new(vec3d_new(-2.0,2.0,-1.0), vec3d_new(-10.0, 6.0, -2.0), 100.0);
+  Keyframe key = keyframe_new(vec3d_new(-2.0,2.0,-1.0), vec3d_new(-10.0, 6.0, -2.0), 200.0);
   char output_filename[1024];
   render_keyframes(cam, key,output_filename, world);
   #else

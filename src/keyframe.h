@@ -8,7 +8,7 @@
 #include "ray.h"
 
 #ifndef SAMPLES_PER_PIXEL
-#define SAMPLES_PER_PIXEL 10
+#define SAMPLES_PER_PIXEL 5
 #endif
 
 // generic keyframes , start and end and duration.
@@ -45,7 +45,7 @@ static inline void render_keyframes(CameraSettings* _cam, Keyframe _keyframe, ch
   Vec3_d _current_position = _keyframe.start_key_pos; 
   for (int i = 0; i < _keyframe.duration; i++) {
     fprintf(stdout, "RENDERING FRAME %d of %d\n",i,(int)_keyframe.duration);
-    sprintf(output_name,"animation_output/output%d.jpg", i);
+    sprintf(output_name,"animation_output/output000%d.jpg", i);
     _current_position = vec3d_add(_current_position, increment);     
     _cam->look_from = _current_position;
     render(_cam, _world, SAMPLES_PER_PIXEL, 10, output_name);
