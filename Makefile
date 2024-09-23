@@ -49,7 +49,8 @@ animation: animation_dir
 	./build/${RELEASE}  
 
 mp4_output:
-	ffmpeg -framerate 30 -i animation_output/output%04d.jpg -c:v libx264 -r 30 -pix_fmt yuv420p output_video.mp4
+	ffmpeg -framerate 24 -i animation_output/output%004d.jpg -c:v libx264 -r 24 -pix_fmt yuv420p output_video.mp4
+
 
 
 release: build_dir

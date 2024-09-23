@@ -24,8 +24,7 @@ bool sphere_hit(Sphere *sphere, Ray r, Interval interval, HitRecord *rec) {
   }
   rec->t = root;
   rec->p = ray_at(r, root);
-  Vec3_d outward_normal = vec3d_div(vec3d_sub(rec->p, sphere->center),
-                                    vec3d_from_float(sphere->radius));
+  Vec3_d outward_normal = vec3d_div(vec3d_sub(rec->p, sphere->center), vec3d_from_float(sphere->radius));
   set_front_face(rec, r, outward_normal);
   return true;
 }
