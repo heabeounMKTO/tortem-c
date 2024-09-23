@@ -1,3 +1,6 @@
+#ifndef COLOR_H
+#define COLOR_H
+
 #include "material.h"
 #include "utils.h"
 #include "vec.h"
@@ -22,7 +25,7 @@ typedef struct {
   short int r,g,b;
 } ScreenColor;
 
-static inline Vec3_d calculate_nishita(Vec3_d ray_dir, Vec3_d sun_dir) {
+/* static inline Vec3_d calculate_nishita(Vec3_d ray_dir, Vec3_d sun_dir) {
   double cos_theta = vec3d_dot(ray_dir, sun_dir);
   double ray_length = 1.0 / (vec3d_y(ray_dir) + 0.1);
   
@@ -69,7 +72,7 @@ static inline Vec3_d calculate_sky_color(Vec3_d ray_dir, Vec3_d sun_dir) {
     vec3d_scale(gradient_color, 1.0-blend)
   );
 }
-
+*/
 static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
   if (depth <= 0) {
     return vec3d_from_float(0.0);
@@ -137,3 +140,4 @@ static inline ScreenColor write_color(Vec3_d pixel_color, short int apply_curve)
   return color;
 }
 
+#endif

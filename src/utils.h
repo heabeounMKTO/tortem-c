@@ -127,14 +127,14 @@ static inline png_bytep* new_png_buffer(int width, int height) {
 
 /// writes image buffer to file, jpeg or png, for now. upon `finishing` frees the image buffer.
 ///
-static inline void write_img_buffer(unsigned char* img_buffer, int width, int height, OutputFormat format) {
+static inline void write_img_buffer(unsigned char* img_buffer, int width, int height, OutputFormat format, char* output_name) {
   switch(format) {
     case OUTPUT_JPEG:
       {
           struct jpeg_compress_struct cinfo;
           struct jpeg_error_mgr jerr;
           FILE * outfile;
-          if ((outfile = fopen("output.jpg", "wb")) == NULL) {
+          if ((outfile = fopen(output_name, "wb")) == NULL) {
                 fprintf(stderr, "Can't open output file\n");
           fclose(outfile);
                 free(img_buffer);
@@ -170,7 +170,7 @@ static inline void write_img_buffer(unsigned char* img_buffer, int width, int he
     case OUTPUT_PNG:
       {
           FILE * outfile;
-          if ((outfile = fopen("output.png", "wb")) == NULL) {
+          if ((outfile = fopen(output_name, "wb")) == NULL) {
                 fprintf(stderr, "Can't open output file\n");
                 fclose(outfile);
                 free(img_buffer);

@@ -9,6 +9,9 @@ OUTPUT_NAME:=ayy.ppm
 build_dir:
 	mkdir -p build
 
+animation_dir: 
+	mkdir -p animation_output
+
 debug: build_dir
 	gcc -DHB_VEC_SCALAR -Werror -Wall -Wextra src/*.c -g -O0 -o build/${DEBUG} ${INCLUDE_MATH}
 	gdb build/${DEBUG}
@@ -39,6 +42,10 @@ img: build_dir
 
 img_sc: build_dir
 	gcc  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
+	./build/${RELEASE}  
+
+animation: animation_dir 
+	gcc  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
 	./build/${RELEASE}  
 
 release: build_dir

@@ -174,7 +174,7 @@ static inline double vec3d_dot(Vec3_d  v1, Vec3_d v2) {
 }
 #else 
 static inline double vec3d_dot(Vec3_d v1, Vec3_d v2) {
-  
+   
 }
 
 #endif

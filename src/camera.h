@@ -1,3 +1,6 @@
+#ifndef CAMERA_H
+#define CAMERA_H
+
 #include "hitable_list.h"
 #include <jpeglib.h>
 #include <math.h>
@@ -52,7 +55,7 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
 
 
 
-static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth) {
+static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth, char* output_name) {
   unsigned char* IMAGE_BUFFER = new_jpeg_buffer(cam->width, cam->height); 
   // png_bytep* IMAGE_BUFFER = new_png_buffer(cam->width, cam->height);
   double aspect_ratio = (double) cam->width / (double) cam->height;
@@ -108,7 +111,9 @@ Vec3_d pixel00_loc;
       store_pixel_in_buffer_jpeg(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
     }
   }
-  write_img_buffer(IMAGE_BUFFER, cam->width, cam->height, OUTPUT_JPEG);
+  // char output_name[512];
+  // sprintf(output_name, "output%d", 1);
+  write_img_buffer(IMAGE_BUFFER, cam->width, cam->height, OUTPUT_JPEG, output_name);
 }
 
-
+#endif
