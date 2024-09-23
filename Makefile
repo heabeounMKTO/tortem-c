@@ -18,7 +18,7 @@ run: build_dir
 	./build/${DEBUG} 
 
 run_sc: build_dir
-	gcc -DHB_VEC_SCALAR -ffast-math -lm -march=native src/*.c -o build/${DEBUG} ${INCLUDE_MATH} 
+	gcc -DDEBUG_PIXELS -ffast-math -lm -march=native src/*.c -o build/${DEBUG} -ljpeg -lpng ${INCLUDE_MATH} 
 	./build/${DEBUG} 
 
 debug_txt: debug_simd debug_scalar

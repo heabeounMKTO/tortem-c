@@ -91,9 +91,6 @@ Vec3_d pixel00_loc;
                                     vec3d_add(pixel_delta_u, pixel_delta_v)));
   double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
 
-
-
-
   for (int j = 0; j < cam->height; j++) {
     for (int i = 0; i < cam->width; i++) {
       Vec3_d pixel_color = vec3d_from_float(0.0);
@@ -103,6 +100,11 @@ Vec3_d pixel00_loc;
       }
       ScreenColor col = write_color(vec3d_mul(pixel_color, vec3d_from_float(pixel_samples_scale)), 1);
       int pixel_index = (j * cam->width + i) * 3;
+
+      /// print pixels
+      #ifdef DEBUG_PIXELS
+      printf("PIXELS x: %f y: %f z: %f\n", col.r, col.g, col.b);
+      #endif
       store_pixel_in_buffer_jpeg(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
     }
   }

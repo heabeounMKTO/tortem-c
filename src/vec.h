@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <math.h>
 
+#ifdef USE_LINASM_VEC
+#include <Vector3D.h>
+#endif
 
 typedef struct {
   float x,y,z;
@@ -11,9 +14,6 @@ typedef struct {
 typedef struct {
  double x,y,z;
 } Vec3_d;
-
-
-
 
 // f32 opps
 static inline Vec3 vec3_new(float x, float y, float z) {
@@ -168,11 +168,16 @@ static inline Vec3_d vec3d_negate(Vec3_d v) {
   Vec3_d neg = { -v.x, -v.y, -v.z };
   return neg;
 }
-
+#ifndef USE_LINASM_VEC
 static inline double vec3d_dot(Vec3_d  v1, Vec3_d v2) {
   return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
 }
+#else 
+static inline double vec3d_dot(Vec3_d v1, Vec3_d v2) {
+  
+}
 
+#endif
 
 static inline double vec3d_length(Vec3_d v) {
   double dot_v = vec3d_dot(v,v);
@@ -204,5 +209,9 @@ static inline Vec3_d vec3d_refract(Vec3_d uv, Vec3_d n, double etai_over_etat) {
 static inline double vec3d_x(Vec3_d v) { return v.x; }
 static inline double vec3d_y(Vec3_d v) { return v.y; }
 static inline double vec3d_z(Vec3_d v) {return v.z;}
+
+#else
+
+
 
 #endif
