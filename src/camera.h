@@ -49,7 +49,8 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
   Vec3_d pixel_sample = vec3d_add(vec3d_add(pixel00_loc, vec3d_mul(vec3d_from_float((double) i + vec3d_x(offset)), pixel_delta_u)), vec3d_mul(vec3d_from_float((double) j + vec3d_y(offset)), pixel_delta_v));
   Vec3_d ray_origin = (camera->defocus_angle <=0) ? camera->camera_center : defocus_disk_sample(camera->camera_center, defocus_u, defocus_v);
   Vec3_d ray_dir = vec3d_unit(vec3d_sub(pixel_sample, ray_origin));
-  Ray final_ray = {.origin=ray_origin, .direction=ray_dir};
+  double ray_time = random_double();
+  Ray final_ray = {.origin=ray_origin, .direction=ray_dir, .ray_time=ray_time};
   return final_ray;
 }
 
@@ -104,15 +105,14 @@ Vec3_d pixel00_loc;
       ScreenColor col = write_color(vec3d_mul(pixel_color, vec3d_from_float(pixel_samples_scale)), 1);
       int pixel_index = (j * cam->width + i) * 3;
 
-      /// print pixels
+      /// print pixel values 
+      /// for debugging flag
       #ifdef DEBUG_PIXELS
       printf("PIXELS x: %f y: %f z: %f\n", col.r, col.g, col.b);
       #endif
       store_pixel_in_buffer_jpeg(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
     }
   }
-  // char output_name[512];
-  // sprintf(output_name, "output%d", 1);
   write_img_buffer(IMAGE_BUFFER, cam->width, cam->height, OUTPUT_JPEG, output_name);
 }
 

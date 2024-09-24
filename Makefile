@@ -48,6 +48,10 @@ animation: animation_dir
 	gcc  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
 	./build/${RELEASE}  
 
+benchmark: build_dir 
+	gcc -DBENCHMARK_RENDER_TIMES  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
+	./build/${RELEASE}  
+
 mp4_output:
 	ffmpeg -framerate 24 -i animation_output/output%004d.jpg -c:v libx264 -r 24 -pix_fmt yuv420p output_video.mp4
 
