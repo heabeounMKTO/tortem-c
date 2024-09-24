@@ -225,4 +225,11 @@ Vec3_d vec3d_cross(Vec3_d v1, Vec3_d v2) {
   return (Vec3_d){v1.x, v1.y, v1.z};
 }
 
+Vec3_d vec3d_unit(Vec3_d v) {
+  struct v3D64_t _v = {v.x, v.y, v.z};
+  Vector3D_Normalize_flt64(_v);
+  return (Vec3_d) { _v.x, _v.y, _v.z }; 
+}
+
+
 #endif
