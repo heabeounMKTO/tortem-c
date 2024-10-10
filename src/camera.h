@@ -4,7 +4,7 @@
 #include "hitable_list.h"
 #include <jpeglib.h>
 #include <math.h>
-#include <pngconf.h>
+// #include <pngconf.h>
 #include <time.h>
 #include "ray.h"
 #include "utils.h"

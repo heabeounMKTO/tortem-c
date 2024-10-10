@@ -1,4 +1,6 @@
 INCLUDE_MATH=-lm -ffast-math
+LDFLAGS=-L/opt/homebrew/opt/jpeg/lib /opt/homebrew/opt/jpeg/lib/libjpeg.dylib
+CPPFLAGS=-I/opt/homebrew/opt/jpeg/include
 DEBUG=main_debug
 RELEASE=main
 SIMD:= -msse -msse2 -msse3 -mavx
@@ -41,12 +43,16 @@ img: build_dir
 	./build/${RELEASE} > ${OUTPUT_NAME} 
 
 img_sc: build_dir
-	gcc  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
+	gcc  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -s 
+	./build/${RELEASE}  
+
+
+img_sc_mac: build_dir
+	echo ${LDFLAGS}
+	gcc  -march=native ${CPPFLAGS} src/*.c -o build/${RELEASE} ${INCLUDE_MATH} ${LDFLAGS} -s 
 	./build/${RELEASE}  
 
 animation: animation_dir 
 	gcc  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
 	./build/${RELEASE}  
 
-release: build_dir
-	gcc src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -s 
