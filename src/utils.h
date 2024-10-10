@@ -7,8 +7,8 @@
 #include <stdbool.h>
 #include "vec.h"
 #include <jpeglib.h>
-#include <png.h>
-#include <pngconf.h>
+// #include <png.h>
+// #include <pngconf.h>
 
 
 // Two numbers with extra steps
@@ -116,13 +116,13 @@ static inline unsigned char* new_jpeg_buffer(int width, int height ) {
       return img_buffer;
 }
 
-static inline png_bytep* new_png_buffer(int width, int height) {
-      png_bytep* img_buffer = (png_bytep*)malloc(sizeof(png_bytep) * height);
-      for (int y = 0; y < height; y++) {
-        img_buffer[y] = (png_byte*)malloc(width*3);
-      }
-      return img_buffer;
-}
+// static inline png_bytep* new_png_buffer(int width, int height) {
+//       png_bytep* img_buffer = (png_bytep*)malloc(sizeof(png_bytep) * height);
+//       for (int y = 0; y < height; y++) {
+//         img_buffer[y] = (png_byte*)malloc(width*3);
+//       }
+//       return img_buffer;
+// }
 
 
 /// writes image buffer to file, jpeg or png, for now. upon `finishing` frees the image buffer.
@@ -167,7 +167,7 @@ static inline void write_img_buffer(unsigned char* img_buffer, int width, int he
             break;
       }
     // TODO finish the fucntion idk
-    case OUTPUT_PNG:
+    /* case OUTPUT_PNG:
       {
           FILE * outfile;
           if ((outfile = fopen(output_name, "wb")) == NULL) {
@@ -212,7 +212,7 @@ static inline void write_img_buffer(unsigned char* img_buffer, int width, int he
         fclose(outfile);
         png_destroy_write_struct(&png, &pnginfo);
         break;
-      }
+      } */
       
     default:
       break;
