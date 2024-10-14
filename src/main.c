@@ -3,8 +3,9 @@
 #include "camera.h"
 #include "hitable_list.h"
 #include "material.h"
+#include "utils.h"
 
-#define SAMPLES_PER_PIXEL 20 
+#define SAMPLES_PER_PIXEL 100 
 #define RAY_MAX_DEPTH 25 
 
 int main() {
@@ -44,6 +45,7 @@ int main() {
   char output_filename[1024];
   sprintf(output_filename, "output_still%d.jpg", 1);
   #ifdef TORTEM_THREADED
+  unsigned char* image_buffet = new_jpeg_buffer(cam->width, cam->height);
   render_threaded(cam, world, SAMPLES_PER_PIXEL, RAY_MAX_DEPTH, output_filename);
   #else
   render(cam, world, SAMPLES_PER_PIXEL, RAY_MAX_DEPTH, output_filename);

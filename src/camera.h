@@ -296,28 +296,6 @@ static inline int render_threaded(CameraSettings* cam, HitableList* world,
   tortem_thread_data_t thread_data[NUM_THREADS];
   int rows_per_thread = (int) ((float) cam->height / (float) NUM_THREADS);
   
-  // renders a preview 
-  for (long t = 0; t < (int) NUM_THREADS; t++) {
-      thread_data[t].cam = cam;
-      thread_data[t].pixel00_loc = pixel00_loc;
-      thread_data[t].pixel_delta_u = pixel_delta_u;
-      thread_data[t].pixel_delta_v = pixel_delta_v;
-      thread_data[t].defocus_disk_u = defocus_disk_u;
-      thread_data[t].defocus_disk_v = defocus_disk_v;
-      thread_data[t].world = world;
-      thread_data[t].image_buffer = IMAGE_BUFFER;
-      thread_data[t].max_depth = max_depth;
-      thread_data[t].image_width = cam->width;
-      thread_data[t].samples_per_pixel = 2;
-      thread_data[t].start_row = t * rows_per_thread;
-      thread_data[t].end_row = (t == (int) NUM_THREADS - 1) ? cam->height : (t + 1) * rows_per_thread;
-      int rc = pthread_create(&threads[t], NULL, render_section, (void*) &thread_data[t]);
-      if (rc) {
-          printf("Error: Unable to create thread, %d\n", rc);
-          exit(-1);
-      }
-  }
-
   for (long t = 0; t < (int) NUM_THREADS; t++) {
       thread_data[t].cam = cam;
       thread_data[t].pixel00_loc = pixel00_loc;

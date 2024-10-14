@@ -59,9 +59,12 @@ img_sc_gui: build_dir
 
 
 img_sc_gui_threaded: build_dir
-	gcc  -pthread -DDEBUG_PIXELS=ON -DTORTEM_THREADED=ON -DTORTEM_RENDER_GUI -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lSDL2 -lpng 
+	gcc  -pthread -DDEBUG_PIXELS=ON -DTORTEM_THREADED=ON -DTORTEM_RENDER_GUI -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lSDL2 -lpng -s 
 	./build/${RELEASE}
 
+img_sc_threaded: build_dir
+	gcc  -pthread  -DTORTEM_THREADED=ON  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lSDL2 -lpng -s 
+	./build/${RELEASE}
 
 animation: animation_dir 
 	gcc -DDEBUG_PIXELS=ON  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
