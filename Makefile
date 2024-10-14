@@ -52,7 +52,12 @@ img_sc_mac: build_dir
 	gcc  -march=native ${CPPFLAGS} src/*.c -o build/${RELEASE} ${INCLUDE_MATH} ${LDFLAGS} -s 
 	./build/${RELEASE}  
 
+
+img_sc_gui: build_dir
+	gcc  -DTORTEM_RENDER_GUI=ON -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lSDL2 -lpng -s 
+	./build/${RELEASE}  
+
 animation: animation_dir 
-	gcc  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
+	gcc -DDEBUG_PIXELS=ON  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
 	./build/${RELEASE}  
 
