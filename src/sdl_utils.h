@@ -1,3 +1,5 @@
+#ifndef TORTEM_SDL_UTIL_H
+#define TORTEM_SDL_UTIL_H
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
@@ -36,3 +38,4 @@ static void free_sdl(SDL_Texture* texture, SDL_Window* window, SDL_Renderer* ren
   }
   SDL_Quit();
 }
+#endif
