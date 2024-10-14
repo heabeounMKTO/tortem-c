@@ -3,10 +3,9 @@
 #include "camera.h"
 #include "hitable_list.h"
 #include "material.h"
-#include "keyframe.h" 
+
 #define SAMPLES_PER_PIXEL 10
 #define RAY_MAX_DEPTH 25 
-
 
 int main() {
   int IMAGE_WIDTH = 800;
@@ -36,7 +35,6 @@ int main() {
   add_sphere_to_hitablelist(world, &sphere2);
   add_sphere_to_hitablelist(world, &sphere3);
   add_sphere_to_hitablelist(world, &sphere_big2);
-  // add_sphere_to_hitablelist(world, &sphere_smol2);
   Vec3_d look_from = vec3d_new(-2.0, 2.0, -1.0);
   Vec3_d look_at = vec3d_new(0.0,0.0,-1.0);
   CameraSettings *cam = new_camera_settings(IMAGE_WIDTH, IMAGE_HEIGHT, 2.1, 2.0,

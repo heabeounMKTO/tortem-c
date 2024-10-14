@@ -11,6 +11,18 @@
 #include "vec.h"
 #include "color.h"
 
+/* renders image progress buffer with sdl :> */
+// #ifdef TORTEM_RENDER_GUI
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_pixels.h>
+#include "sdl_utils.h"
+static SDL_Window* window = NULL;
+static SDL_Renderer* renderer = NULL;
+static SDL_Texture* texture = NULL;
+// #endif
+
 typedef struct {
   int width, height;
   double focus_distance,viewport_height,vfov, defocus_angle;
@@ -55,9 +67,27 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
 
 
 
-static inline void render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth, char* output_name) {
+static inline int render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth, char* output_name) {
   unsigned char* IMAGE_BUFFER = new_jpeg_buffer(cam->width, cam->height); 
   // png_bytep* IMAGE_BUFFER = new_png_buffer(cam->width, cam->height);
+  
+
+  // #ifdef TORTEM_RENDER_GUI 
+  if(!init_sdl(cam->width, cam->height, "tortem_render", &window, &renderer)) {
+        fprintf(stderr, "Failed to allocate memory for image buffer\n");
+        return 1;
+  }
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STATIC, cam->width, cam->height);
+  if (texture == NULL) {
+    fprintf(stderr, "Texture could not be created! SDL_Error: %s\n", SDL_GetError());
+    free(IMAGE_BUFFER);
+    free_sdl(texture, window, renderer);
+    return 1;
+  }
+  // #endif 
+
+
+
   double aspect_ratio = (double) cam->width / (double) cam->height;
   double viewport_width = cam->viewport_height * aspect_ratio;
   cam->camera_center = cam->look_from;
@@ -109,11 +139,29 @@ Vec3_d pixel00_loc;
       printf("PIXELS x: %f y: %f z: %f\n", col.r, col.g, col.b);
       #endif
       store_pixel_in_buffer_jpeg(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
+      #ifdef TORTEM_RENDER_GUI
+      SDL_UpdateTexture(texture, NULL, IMAGE_BUFFER, cam->width * 3);
+      SDL_Event e;
+      int quit = 0;
+      while(!quit) {
+        while(SDL_PollEvent(&e) != 0) {
+          if(e.type == SDL_QUIT) {
+            quit =1;
+          }
+        }
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
+        SDL_RenderPresent(renderer);
+      }
+      #endif
     }
   }
   // char output_name[512];
   // sprintf(output_name, "output%d", 1);
   write_img_buffer(IMAGE_BUFFER, cam->width, cam->height, OUTPUT_JPEG, output_name);
+  #ifdef TORTEM_RENDER_GUI
+  free_sdl(texture, window, renderer);
+  #endif
+  return 1;
 }
-
 #endif
