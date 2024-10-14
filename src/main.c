@@ -4,7 +4,7 @@
 #include "hitable_list.h"
 #include "material.h"
 
-#define SAMPLES_PER_PIXEL 10
+#define SAMPLES_PER_PIXEL 100 
 #define RAY_MAX_DEPTH 25 
 
 int main() {

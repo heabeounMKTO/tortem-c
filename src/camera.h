@@ -69,9 +69,6 @@ static inline Ray get_ray(CameraSettings* camera,Vec3_d pixel00_loc,Vec3_d pixel
 
 static inline int render(CameraSettings* cam, HitableList* world, int samples_per_pixel, int max_depth, char* output_name) {
   unsigned char* IMAGE_BUFFER = new_jpeg_buffer(cam->width, cam->height); 
-  // png_bytep* IMAGE_BUFFER = new_png_buffer(cam->width, cam->height);
-  
-
   #ifdef TORTEM_RENDER_GUI 
   SDL_Event e;
   int quit = 0;
@@ -87,8 +84,6 @@ static inline int render(CameraSettings* cam, HitableList* world, int samples_pe
     return 1;
   }
   #endif 
-
-
 
   double aspect_ratio = (double) cam->width / (double) cam->height;
   double viewport_width = cam->viewport_height * aspect_ratio;
@@ -120,11 +115,33 @@ static inline int render(CameraSettings* cam, HitableList* world, int samples_pe
     ),
     vec3d_div(viewport_v, vec3d_from_float(2.0))
 );
-Vec3_d pixel00_loc;
+  Vec3_d pixel00_loc;
   pixel00_loc = vec3d_add(viewport_upper_left,
                           vec3d_mul(vec3d_from_float(0.5),
                                     vec3d_add(pixel_delta_u, pixel_delta_v)));
   double pixel_samples_scale = 1.0 / (double) samples_per_pixel;
+  
+  #ifdef TORTEM_RENDER_GUI
+  /* renders a two sample preview for preview!? 
+   * "pre-rendering"?!
+   * */
+  fprintf(stdout,"running `preview` stage");
+  fflush(stdout);
+  for (int j = 0; j < cam->height; j++) {
+    for (int i = 0; i < cam->width; i++) {
+      Vec3_d pixel_color = vec3d_from_float(0.0);
+      for (int sample = 0; sample < 1; sample++ ) {
+        Vec3_d _ray_color = ray_color(get_ray(cam,pixel00_loc, pixel_delta_u, pixel_delta_v, i, j, defocus_disk_u, defocus_disk_v), world, 1);
+        pixel_color = vec3d_add(pixel_color, _ray_color);
+      }
+      ScreenColor col = write_color(vec3d_mul(pixel_color, vec3d_from_float(pixel_samples_scale)), 1);
+      int pixel_index = (j * cam->width + i) * 3;
+      store_pixel_in_buffer_jpeg(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
+    }
+  }
+  fprintf(stdout,"done `preview` stage");
+  fflush(stdout);
+  #endif
 
   for (int j = 0; j < cam->height; j++) {
     for (int i = 0; i < cam->width; i++) {
