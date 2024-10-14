@@ -63,7 +63,7 @@ img_sc_gui_threaded: build_dir
 	./build/${RELEASE}
 
 img_sc_threaded: build_dir
-	gcc  -pthread  -DTORTEM_THREADED=ON  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lSDL2 -lpng -s 
+	gcc  -pthread  -DTORTEM_THREADED=ON  -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -s 
 	./build/${RELEASE}
 
 animation: animation_dir 
