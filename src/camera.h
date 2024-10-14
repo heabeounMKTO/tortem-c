@@ -12,7 +12,7 @@
 #include "color.h"
 
 /* renders image progress buffer with sdl :> */
-// #ifdef TORTEM_RENDER_GUI
+#ifdef TORTEM_RENDER_GUI
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
@@ -21,7 +21,7 @@
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static SDL_Texture* texture = NULL;
-// #endif
+#endif
 
 typedef struct {
   int width, height;
@@ -72,7 +72,9 @@ static inline int render(CameraSettings* cam, HitableList* world, int samples_pe
   // png_bytep* IMAGE_BUFFER = new_png_buffer(cam->width, cam->height);
   
 
-  // #ifdef TORTEM_RENDER_GUI 
+  #ifdef TORTEM_RENDER_GUI 
+  SDL_Event e;
+  int quit = 0;
   if(!init_sdl(cam->width, cam->height, "tortem_render", &window, &renderer)) {
         fprintf(stderr, "Failed to allocate memory for image buffer\n");
         return 1;
@@ -84,7 +86,7 @@ static inline int render(CameraSettings* cam, HitableList* world, int samples_pe
     free_sdl(texture, window, renderer);
     return 1;
   }
-  // #endif 
+  #endif 
 
 
 
@@ -139,27 +141,25 @@ Vec3_d pixel00_loc;
       printf("PIXELS x: %f y: %f z: %f\n", col.r, col.g, col.b);
       #endif
       store_pixel_in_buffer_jpeg(IMAGE_BUFFER, pixel_index, col.r, col.g, col.b);
-      #ifdef TORTEM_RENDER_GUI
-      SDL_UpdateTexture(texture, NULL, IMAGE_BUFFER, cam->width * 3);
-      SDL_Event e;
-      int quit = 0;
+    }
+    #ifdef TORTEM_RENDER_GUI
+        SDL_UpdateTexture(texture, NULL, IMAGE_BUFFER, cam->width * 3);
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
+        SDL_RenderPresent(renderer);
+    #endif
+  }
+
+  write_img_buffer(IMAGE_BUFFER, cam->width, cam->height, OUTPUT_JPEG, output_name);
+  #ifdef TORTEM_RENDER_GUI
       while(!quit) {
         while(SDL_PollEvent(&e) != 0) {
           if(e.type == SDL_QUIT) {
             quit =1;
+        break;
           }
         }
-        SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
       }
-      #endif
-    }
-  }
-  // char output_name[512];
-  // sprintf(output_name, "output%d", 1);
-  write_img_buffer(IMAGE_BUFFER, cam->width, cam->height, OUTPUT_JPEG, output_name);
-  #ifdef TORTEM_RENDER_GUI
   free_sdl(texture, window, renderer);
   #endif
   return 1;

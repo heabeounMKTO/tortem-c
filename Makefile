@@ -50,7 +50,7 @@ img_sc_gui: build_dir
 	./build/${RELEASE}  
 
 animation: animation_dir 
-	gcc  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
+	gcc -DDEBUG_PIXELS=ON  -DTORTEM_RENDER_ANIM -march=native src/*.c -o build/${RELEASE} ${INCLUDE_MATH} -ljpeg -lpng -s 
 	./build/${RELEASE}  
 
 release: build_dir

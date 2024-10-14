@@ -11,12 +11,12 @@ static int init_sdl(int width, int height, char* window_title , SDL_Window** sdl
     return 0;
   }
   *sdl_window = SDL_CreateWindow(window_title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
-  if (sdl_window == NULL) {
+  if (*sdl_window == NULL) {
       fprintf(stderr, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
       return 0;
   }
   *sdl_renderer = SDL_CreateRenderer(*sdl_window, -1, SDL_RENDERER_ACCELERATED);
-  if (sdl_renderer == NULL) {
+  if (*sdl_renderer == NULL) {
       fprintf(stderr, "Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
       return 0;
   }
