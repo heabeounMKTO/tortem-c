@@ -4,10 +4,11 @@
 #include "hitable_list.h"
 #include "material.h"
 
-#define SAMPLES_PER_PIXEL 100 
+#define SAMPLES_PER_PIXEL 20 
 #define RAY_MAX_DEPTH 25 
 
 int main() {
+
   int IMAGE_WIDTH = 800;
   int IMAGE_HEIGHT = 800;
   Material sphere_m_test = new_metal_mat(vec3d_new(0.7, 0.57, 0.67), 0.01);
@@ -18,17 +19,13 @@ int main() {
   Material sphere_m_glass2 = new_dialectric_mat(vec3d_new(1.0, 1.0, 1.0), (1.0 / 1.45));
   Material sphere_m_glass4 = new_dialectric_mat(vec3d_new(1.0, 1.0, 1.0), (1.0/2.4));
   Material sphere_m_glass3 = new_dialectric_mat(vec3d_new(1.0, 1.0, 1.0), (1.45));
-
   HitableList *world = init_hit_record_list(1);
   Sphere sphere = new_sphere(vec3d_new(0.0, -100.5, -3.5), sphere_m_test, 100.0);
   Sphere sphere_big = new_sphere(vec3d_new(0.0, 0.0, -1.0), sphere_m_glass, 0.5);
   Sphere sphere_smol = new_sphere(vec3d_new(0.0, 0.0, -1.0), sphere_m_glass2, 0.45);
   Sphere sphere2 = new_sphere(vec3d_new(2.0,0.5,-2.2),sphere_m_fuzz, 1.0);
   Sphere sphere3 = new_sphere(vec3d_new(-1.0,0.5,-2.0),sphere_m_test2, 0.689);
-
   Sphere sphere_big2 = new_sphere(vec3d_new(1.0, 0.135, 0.0), sphere_m_fuzz2, 0.7);
-  // Sphere sphere_smol2 = new_sphere(vec3d_new(1.0, 0.135, 0.0), sphere_m_fuzz2, 0.4);
-  
   add_sphere_to_hitablelist(world, &sphere);
   add_sphere_to_hitablelist(world, &sphere_big);
   add_sphere_to_hitablelist(world, &sphere_smol);
@@ -46,6 +43,11 @@ int main() {
   #else
   char output_filename[1024];
   sprintf(output_filename, "output_still%d.jpg", 1);
+  #ifdef TORTEM_THREADED
+  render_threaded(cam, world, SAMPLES_PER_PIXEL, RAY_MAX_DEPTH, output_filename);
+  #else
   render(cam, world, SAMPLES_PER_PIXEL, RAY_MAX_DEPTH, output_filename);
+  #endif
+
   #endif
 }
