@@ -4,12 +4,18 @@
 #include "hitable_list.h"
 #include "material.h"
 #include "utils.h"
-
+#ifndef SAMPLES_PER_PIXEL
 #define SAMPLES_PER_PIXEL 100 
+#endif
+
+#ifndef RAY_MAX_DEPTH
 #define RAY_MAX_DEPTH 25 
+#endif
 
 int main() {
-
+  fprintf(stdout,
+          "RENDERING WITH %d SAMPLES , AT %d RAY DEPTH", 
+          SAMPLES_PER_PIXEL, RAY_MAX_DEPTH);
   int IMAGE_WIDTH = 800;
   int IMAGE_HEIGHT = 800;
   Material sphere_m_test = new_metal_mat(vec3d_new(0.7, 0.57, 0.67), 0.01);
