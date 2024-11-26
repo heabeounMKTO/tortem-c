@@ -22,6 +22,13 @@ static inline BvhAABB new_bvh_from_vecpair(Vec3_d v1, Vec3_d v2) {
   };
 }
 
+static inline BvhAABB new_bvh_from_bbox(BvhAABB box0, BvhAABB box1) {
+  return (BvhAABB) {
+        .x = interval_enclose(box0.x, box1.x),
+        .y = interval_enclose(box0.y, box1.y),
+        .z = interval_enclose(box0.z, box1.z)
+  };
+}
 
 static inline Interval axis_interval(BvhAABB bvh, int n) {
   if (n == 1) return bvh.x;

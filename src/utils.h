@@ -31,6 +31,14 @@ static inline double random_interval(double min, double max) {
 return min + (max - min) * (rand() / (double) RAND_MAX);
 }
 
+// creates a interval that encloses the two interval 
+static inline Interval interval_enclose(Interval a, Interval b) {
+  return (Interval) { 
+                        .min = a.min <= b.min ? a.min : b.min,
+                        .max = a.max >= b.max ? a.max : b.max
+                    };
+}
+
 
 static inline Vec3_d random_unit_vector() {
       while(true) {

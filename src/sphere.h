@@ -23,8 +23,8 @@ static inline Sphere new_sphere(Vec3_d sphere_pos,
                                 Material sphere_material, 
                                 double sphere_radius) {
   Vec3_d r_vec = vec3d_from_float(sphere_radius);
-BvhAABB bounding_box = new_bvh_from_vecpair(vec3d_sub(sphere_pos, r_vec), vec3d_add(sphere_pos, r_vec)); 
-   return (Sphere){
+  BvhAABB bounding_box = new_bvh_from_vecpair(vec3d_sub(sphere_pos, r_vec), vec3d_add(sphere_pos, r_vec)); 
+  return (Sphere){
                    .center = sphere_pos, 
                    .radius = sphere_radius, 
                    .sphere_mat=sphere_material,

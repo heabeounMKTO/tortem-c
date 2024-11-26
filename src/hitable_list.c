@@ -3,6 +3,7 @@
 #include "material.h"
 #include "utils.h"
 #include <stdlib.h>
+#include "bvh_aabb.h"
 
 HitableList *init_hit_record_list(size_t initial_capacity) {
   HitableList *list =
