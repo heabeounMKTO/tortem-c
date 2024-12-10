@@ -1,6 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 #include "hitable.h"
+#include <math.h>
 #include "vec.h"
 #include "ray.h"
 #include <stdbool.h>
@@ -30,6 +31,15 @@ static inline Sphere new_sphere(Vec3_d sphere_pos,
                    .sphere_mat=sphere_material,
                    .bounding_box = bounding_box
                   };
+}
+
+
+// constant position for sphere UV's
+static inline void sphere_get_uv_for_hit_rec(const Vec3_d point, HitRecord* input_record) {
+  double theta = acos(-point.y); 
+  double phi = atan2(-point.z, point.z) + 3.14; 
+  input_record->u = phi / (6.28); // 2 pi, lazy mfs edition (it might not end well) 
+  input_record->v = theta / 3.14;
 }
 
 #endif
