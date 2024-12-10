@@ -4,7 +4,7 @@
 #include "ray.h"
 #include "vec.h"
 #include <stdbool.h>
-
+#include "bvh_aabb.h"
 
 typedef struct {
   Vec3_d p;

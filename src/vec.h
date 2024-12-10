@@ -213,5 +213,4 @@ static inline double vec3d_z(Vec3_d v) {return v.z;}
 #else
 
 
-
 #endif
