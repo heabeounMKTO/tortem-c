@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include "hitable.h"
 #include "texture.h"
+#include "lights.h"
+
 
 typedef enum {
   METAL,
@@ -16,16 +18,14 @@ typedef enum {
   DIELECTRIC, 
 } MaterialType;
 
-typedef struct {
-  bool is_on;
-  double emissiveness;
-} Emission;
+
 
 
 typedef struct {
   Texture* tex;
   Vec3_d scatter_dir, albedo;
   MaterialType mat_type;
+  Emission emission;
 } LambertianMaterial;
 
 typedef struct {
@@ -33,6 +33,7 @@ typedef struct {
   Vec3_d scatter_dir, albedo;
   double fuzz;
   MaterialType mat_type;
+  Emission emission;
 } MetalMaterial;
 
 typedef struct {
@@ -40,6 +41,7 @@ typedef struct {
   Vec3_d scatter_dir, albedo;
   double index_of_refraction;
   MaterialType mat_type;
+  Emission emission;
 } DielectricMaterial;
 
 typedef union {
