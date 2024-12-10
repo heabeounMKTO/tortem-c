@@ -3,6 +3,7 @@
 #include "material.h"
 #include "sphere.h"
 #include "utils.h"
+#include "texture.h"
 #include "vec.h"
 #ifndef SAMPLES_PER_PIXEL
 #define SAMPLES_PER_PIXEL 20
@@ -17,8 +18,12 @@ int main() {
           SAMPLES_PER_PIXEL, RAY_MAX_DEPTH);
   int IMAGE_WIDTH = 800;
   int IMAGE_HEIGHT = 800;
+ Texture text_checker = (Texture) {.checker= checker_texture_new(vec3d_new(0.0,1.0, 0.5), vec3d_new(1.0,0.2, 0.5), 3.0)};
   Material sphere_m_test = new_metal_mat(vec3d_new(0.7, 0.57, 0.67), 0.01);
   Material sphere_m_test2 = new_lambert_mat(vec3d_new(0.5, 0.7, 0.9));
+
+  mat_add_tex(&sphere_m_test2, &text_checker);
+  
   Material sphere_m_fuzz = new_metal_mat(vec3d_new(0.65, 0.9, 0.9), 0.45);
   Material sphere_m_fuzz2 = new_metal_mat(vec3d_new(0.95, 0.95, 0.95), 0.0);
   Material sphere_m_glass = new_dialectric_mat(vec3d_new(1.0, 1.0, 1.0), 1.5);

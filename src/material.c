@@ -29,6 +29,9 @@ void determine_material_scatter(Material mat,
     }
     scattered->origin = rec->p;
     scattered->direction = lambert_scatter_dir;
+
+    /*if no have texture , we fallback*/
+
     if (mat.lambert.tex == NULL) {
       *attenuation = mat.lambert.albedo;
     }
