@@ -44,8 +44,6 @@ static inline Material new_metal_mat(Vec3_d color, double fuzz) {
   Material _matmetal ={ .metal= { .albedo=color, 
                                                  .scatter_dir=vec3d_from_float(0.0),
                                                  .fuzz=fuzz ,.mat_type=METAL }};
-
-
   return _matmetal; 
 }
 

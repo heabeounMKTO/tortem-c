@@ -14,7 +14,7 @@
 #ifdef TORTEM_THREADED
 #include <pthread.h>
 #ifndef NUM_THREADS
-#define NUM_THREADS 4 
+#define NUM_THREADS 12 
 #endif
 #endif
 

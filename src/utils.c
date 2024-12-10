@@ -25,5 +25,6 @@ bool interval_surrounds(Interval interval, double x) {
 
 Interval interval_expand(Interval interval, double delta) {
   double padding = delta / 2.0;
-  return (Interval) {.min=interval.min - padding, .max=interval.max + padding};
+  return (Interval){.min = interval.min - padding,
+                    .max = interval.max + padding};
 }
