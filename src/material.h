@@ -8,6 +8,7 @@
 #include "ray.h"
 #include <stdbool.h>
 #include "hitable.h"
+#include "texture.h"
 
 typedef enum {
   METAL,
@@ -37,7 +38,6 @@ typedef union {
   LambertianMaterial lambert;
   DielectricMaterial dielectric;
 } Material;
-
 
 
 static inline Material new_metal_mat(Vec3_d color, double fuzz) {

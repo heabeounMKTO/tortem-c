@@ -347,9 +347,9 @@ static inline int render_threaded(CameraSettings* cam, HitableList* world,
         }
       }
   free_sdl(texture, window, renderer);
-  #endif
   SDL_DestroyWindow(window);
   SDL_Quit();
+  #endif
   return 0;
 }
 

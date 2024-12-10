@@ -18,7 +18,8 @@ void determine_material_scatter(Material mat, const Ray r_in,
   }
 
   if (mat.lambert.mat_type == LAMBERTIAN) {
-    Vec3_d lambert_scatter_dir = vec3d_add(rec->normal, random_unit_vector());
+    Vec3_d lambert_scatter_dir = vec3d_add(rec->normal, 
+                                           random_unit_vector());
     // if near zero , give it back >:(
     if (check_vec3d_near_zero(lambert_scatter_dir)) {
       lambert_scatter_dir = rec->normal;
