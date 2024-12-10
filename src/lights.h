@@ -11,7 +11,8 @@ typedef struct {
 } Emission;
 
 
-static inline void emission_color_from_texture(double u , double v , const Texture* texture, 
+static inline void emission_color_from_texture(double u , double v , 
+                                               const Texture* texture, 
                                                const Vec3_d input_point,
                                                Emission* emission) {
   if (texture->checker.texture_type == CHECKER_TEXTURE){

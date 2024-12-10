@@ -18,9 +18,6 @@ typedef enum {
   DIELECTRIC, 
 } MaterialType;
 
-
-
-
 typedef struct {
   Texture* tex;
   Vec3_d scatter_dir, albedo;
@@ -65,6 +62,13 @@ static inline Material new_lambert_mat(Vec3_d color) {
 }
 
 
+static inline Material new_lambert_mat_from_texture(Texture* texture)
+{
+  return (Material) {
+    .lambert={.tex=texture, .mat_type=LAMBERTIAN}
+  };
+}
+
 /// ior = index of refraction
 ///
 /// Read more `https://en.wikipedia.org/wiki/List_of_refractive_indices`
@@ -98,7 +102,7 @@ static inline void mat_add_tex(Material* input_material, Texture* input_texture)
 }
 
 
-static inline void mat_make_emissive() {
+static inline void mat_emitted(const Material* input_material) {
 
 }
 
