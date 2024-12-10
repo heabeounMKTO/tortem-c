@@ -36,8 +36,7 @@ static inline Interval bvh_axis_interval(const BvhAABB* bvh, int n) {
   return bvh->x;
 }
 
-
-static inline bool bvh_hit(const BvhAABB* bvh , const Ray* r, Interval ray_t) {
+static inline bool bvh_aabb_hit(const BvhAABB* bvh , const Ray* r, Interval ray_t) {
   Vec3_d ray_orig = r->origin;
   Vec3_d ray_dir = r->direction;
   for (int axis = 0; axis < 3; axis++) {
@@ -69,7 +68,6 @@ static inline bool bvh_hit(const BvhAABB* bvh , const Ray* r, Interval ray_t) {
     if (ray_t.max <= ray_t.min)
         return false;
   }
-
   return true;
 }
 

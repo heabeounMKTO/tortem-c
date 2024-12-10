@@ -43,9 +43,10 @@ void determine_material_scatter(Material mat,
   }
 
   if (mat.dielectric.mat_type == DIELECTRIC) {
-    double ri = rec->front_face ? (1.0 / mat.dielectric.index_of_refraction)
-                                : mat.dielectric.index_of_refraction;
+    double ri = rec->front_face ? (1.0 / mat.dielectric.index_of_refraction) : mat.dielectric.index_of_refraction;
     Vec3_d unit_direction = vec3d_unit(r_in.direction);
+  
+    Vec3_d caustic_offset = vec3d_from_float(0.0);
 
     double cos_theta =
         fmin(vec3d_dot(vec3d_negate(unit_direction), rec->normal), 1.0);
@@ -53,16 +54,33 @@ void determine_material_scatter(Material mat,
 
     bool cannot_refract = ri * sin_theta > 1.0;
 
-    Vec3_d direction;
+    Vec3_d direction, caustic_attenuation;
+    
     if (cannot_refract || schlicks_approx(cos_theta, ri) > random_double()) {
       direction = vec3d_reflect(unit_direction, rec->normal);
-      // printf("Reflecting\n");
+      // Reflecting
+      double caustic_intensity = fabs(vec3d_dot(unit_direction, rec->normal));
+      caustic_offset = vec3d_scale(rec->normal, caustic_intensity * 0.001);
+      caustic_attenuation = mat.dielectric.albedo;
+      caustic_attenuation.x *= (1.0 + caustic_intensity * 0.1);
+      caustic_attenuation.y *= (1.0 + caustic_intensity * 0.1);
+      caustic_attenuation.z *= (1.0 + caustic_intensity * 0.1);
     } else {
       direction = vec3d_refract(unit_direction, rec->normal, ri);
-      // printf("Refracting\n");
+      // Refracting
+      double caustic_intensity = 1.0 - fabs(vec3d_dot(direction, rec->normal));
+      caustic_offset = vec3d_scale(direction, caustic_intensity * 0.02);
+      caustic_attenuation = mat.dielectric.albedo;
+      caustic_attenuation.x *= (1.0 + caustic_intensity * 0.2);
+      caustic_attenuation.y *= (1.0 + caustic_intensity * 0.2);
+      caustic_attenuation.z *= (1.0 + caustic_intensity * 0.2);
     }
-    scattered->origin = rec->p;
+    // scattered->origin = rec->p;
+    scattered->origin = vec3d_add(rec->p, caustic_offset);
     scattered->direction = direction;
-    *attenuation = mat.dielectric.albedo;
+
+    // *attenuation = mat.dielectric.albedo;
+    //
+    *attenuation = caustic_attenuation;
   }
 }

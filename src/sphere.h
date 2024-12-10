@@ -19,7 +19,7 @@ typedef struct {
 
 bool sphere_hit(Sphere* sphere, Ray r, Interval interval, HitRecord* rec);
 
-// todo add bbox calculation
+/// sphere's bbox is already calcualted during init
 static inline Sphere new_sphere(Vec3_d sphere_pos, 
                                 Material sphere_material, 
                                 double sphere_radius) {
@@ -41,5 +41,6 @@ static inline void sphere_get_uv_for_hit_rec(const Vec3_d point, HitRecord* inpu
   input_record->u = phi / (6.28); // 2 pi, lazy mfs edition (it might not end well) 
   input_record->v = theta / 3.14;
 }
+
 
 #endif

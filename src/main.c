@@ -2,7 +2,6 @@
 #include "hitable_list.h"
 #include "material.h"
 #include "sphere.h"
-#include "utils.h"
 #include "texture.h"
 #include "vec.h"
 #ifndef SAMPLES_PER_PIXEL
