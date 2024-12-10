@@ -34,7 +34,7 @@ static SDL_Texture* texture = NULL;
 typedef struct {
   int width, height;
   double focus_distance,viewport_height,vfov, defocus_angle;
-  Vec3_d camera_center, v_up, look_from, look_at; //Camera origin
+  Vec3_d camera_center, v_up, look_from, look_at, background_color; //Camera origin
 } CameraSettings ;
 
 

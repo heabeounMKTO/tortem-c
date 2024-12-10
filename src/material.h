@@ -90,4 +90,9 @@ static inline void mat_add_tex(Material* input_material, Texture* input_texture)
 }
 
 
+static inline void mat_make_emissive() {
+
+}
+
+
 #endif
