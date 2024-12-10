@@ -17,6 +17,12 @@ typedef enum {
 } MaterialType;
 
 typedef struct {
+  bool is_on;
+  double emissiveness;
+} Emission;
+
+
+typedef struct {
   Texture* tex;
   Vec3_d scatter_dir, albedo;
   MaterialType mat_type;
