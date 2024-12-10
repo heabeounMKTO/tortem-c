@@ -28,4 +28,3 @@ Interval interval_expand(Interval interval, double delta) {
                     .max = interval.max + padding};
 }
 
-Interval interval_from_pair(Interval )
