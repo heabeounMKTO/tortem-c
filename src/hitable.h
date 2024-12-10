@@ -9,7 +9,7 @@
 typedef struct {
   Vec3_d p;
   Vec3_d normal;
-  double t;
+  double t, u, v;
   bool front_face;
 } HitRecord;
 

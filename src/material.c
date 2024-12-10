@@ -1,13 +1,16 @@
 #include "material.h"
 #include "ray.h"
+#include "texture.h"
 #include "utils.h"
 #include "vec.h"
 
-void determine_material_scatter(Material mat, const Ray r_in,
-                                const HitRecord *rec, Vec3_d *attenuation,
+void determine_material_scatter(Material mat, 
+                                const Ray r_in,
+                                const HitRecord *rec, 
+                                Vec3_d *attenuation,
                                 Ray *scattered) {
   if (mat.metal.mat_type == METAL) {
-
+  
     Vec3_d metal_scatter_dir = vec3d_reflect(r_in.direction, rec->normal);
     metal_scatter_dir = vec3d_add(
         vec3d_unit(metal_scatter_dir),
@@ -19,13 +22,24 @@ void determine_material_scatter(Material mat, const Ray r_in,
 
   if (mat.lambert.mat_type == LAMBERTIAN) {
     Vec3_d lambert_scatter_dir = vec3d_add(rec->normal, random_unit_vector());
-    // if near zero , give it back >:(
+
+    /* if near zero , give it back >:( */
     if (check_vec3d_near_zero(lambert_scatter_dir)) {
       lambert_scatter_dir = rec->normal;
     }
     scattered->origin = rec->p;
     scattered->direction = lambert_scatter_dir;
-    *attenuation = mat.lambert.albedo;
+
+    /*if no have texture , we fallback*/
+
+    if (mat.lambert.tex == NULL) {
+      *attenuation = mat.lambert.albedo;
+    }
+    else {
+      if (mat.lambert.tex->checker.texture_type == CHECKER_TEXTURE) {
+        *attenuation = checker_texture_determine_color(rec->u, rec->v, mat.lambert.tex->checker , rec->p); 
+      }
+    }
   }
 
   if (mat.dielectric.mat_type == DIELECTRIC) {

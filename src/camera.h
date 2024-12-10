@@ -14,7 +14,7 @@
 #ifdef TORTEM_THREADED
 #include <pthread.h>
 #ifndef NUM_THREADS
-#define NUM_THREADS 4 
+#define NUM_THREADS 12 
 #endif
 #endif
 
@@ -347,9 +347,9 @@ static inline int render_threaded(CameraSettings* cam, HitableList* world,
         }
       }
   free_sdl(texture, window, renderer);
-  #endif
   SDL_DestroyWindow(window);
   SDL_Quit();
+  #endif
   return 0;
 }
 
