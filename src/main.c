@@ -6,19 +6,19 @@
 #include "texture.h"
 #include "vec.h"
 #ifndef SAMPLES_PER_PIXEL
-#define SAMPLES_PER_PIXEL 20
+#define SAMPLES_PER_PIXEL 10 
 #endif
 
 #ifndef RAY_MAX_DEPTH
-#define RAY_MAX_DEPTH 25
+#define RAY_MAX_DEPTH 10 
 #endif
 
 int main() {
-  fprintf(stdout, "RENDERING WITH %d SAMPLES , AT %d RAY DEPTH",
+  fprintf(stdout, "RENDERING WITH %d SAMPLES , AT %d RAY DEPTH\n",
           SAMPLES_PER_PIXEL, RAY_MAX_DEPTH);
   int IMAGE_WIDTH = 800;
   int IMAGE_HEIGHT = 800;
- Texture text_checker = (Texture) {.checker= checker_texture_new(vec3d_new(0.0,1.0, 0.5), vec3d_new(1.0,0.2, 0.5), 3.0)};
+ Texture text_checker = (Texture) {.checker= checker_texture_new(vec3d_new(0.0,0.8, 0.7), vec3d_new(1.0,0.2, 0.5), 3.0)};
   Material sphere_m_test = new_metal_mat(vec3d_new(0.7, 0.57, 0.67), 0.01);
   Material sphere_m_test2 = new_lambert_mat(vec3d_new(0.5, 0.7, 0.9));
 
