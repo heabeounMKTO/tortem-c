@@ -1,10 +1,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-
 #include "vec.h"
 #include <math.h>
-
 
 typedef struct {
   double inv_scale;
