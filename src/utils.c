@@ -27,4 +27,3 @@ Interval interval_expand(Interval interval, double delta) {
   return (Interval){.min = interval.min - padding,
                     .max = interval.max + padding};
 }
-
