@@ -54,11 +54,15 @@ static inline Material new_metal_mat(Vec3_d color, double fuzz) {
                                                  .fuzz=fuzz ,.mat_type=METAL }};
   return _matmetal; 
 }
-
+/// INITILAIZES A LAMBERT MF MAT, 
+/// WITH A RGB TEXTURE AS DEFAULT
 static inline Material new_lambert_mat(Vec3_d color) {
+  Texture rgb_tex = (Texture) {.rgb= {.color = color, .texture_type=RGB_TEXTURE}};
   return (Material) {
-    .lambert={ .albedo=color, .mat_type=LAMBERTIAN
-  }};
+    .lambert={ .albedo=color, 
+      .mat_type=LAMBERTIAN,
+      .tex= &rgb_tex} 
+    };
 }
 
 
@@ -102,10 +106,9 @@ static inline void mat_add_tex(Material* input_material, Texture* input_texture)
   }
 }
 
-/// emit white light , if enable
+/// turns a object into a light , if enable
 ///
-/// TODO: add suppourt for emissive textures.
-static inline void mat_emit_enable(Material* input_material) {
+static inline void mat_enable_emit(Material* input_material) {
   if (input_material->lambert.emission.is_on == false) {
     input_material->lambert.emission.is_on = true; 
     input_material->lambert.emission.emission_color = vec3d_from_float(1.0);

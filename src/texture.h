@@ -18,15 +18,25 @@ typedef struct {
   Vec3_d odd, even; 
 } CheckerTexture;
 
+typedef struct {
+  TextureType texture_type;  
+  Vec3_d color;
+} RgbTexture;
+
 typedef union {
   CheckerTexture checker;
+  RgbTexture rgb; 
 } Texture;
+
+
 
 static inline CheckerTexture checker_texture_new(const Vec3_d color1,
                                                  const Vec3_d color2 ,
                                                  const double scale) {
   return (CheckerTexture) {.inv_scale=scale,  .odd=color1 ,.even=color2, .texture_type=CHECKER_TEXTURE}; 
 }
+
+
 
 static inline Vec3_d checker_texture_determine_color(double u ,
                                                      double v, 

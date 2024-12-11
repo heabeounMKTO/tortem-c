@@ -1,9 +1,9 @@
 #include "hitable_list.h"
+#include "bvh_aabb.h"
 #include "hitable.h"
 #include "material.h"
 #include "utils.h"
 #include <stdlib.h>
-#include "bvh_aabb.h"
 
 HitableList *init_hit_record_list(size_t initial_capacity) {
   HitableList *list =
@@ -23,7 +23,7 @@ HitableList *init_hit_record_list(size_t initial_capacity) {
 }
 
 bool check_world_hits(HitableList *world, Ray r, Interval interval,
-                      HitRecord *hit_rec, Vec3_d *attenuation, Ray *scattered, 
+                      HitRecord *hit_rec, Vec3_d *attenuation, Ray *scattered,
                       Vec3_d *emission_value) {
   bool hit_anything = false;
   double closest_so_far = interval.max;
