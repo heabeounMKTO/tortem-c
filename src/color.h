@@ -21,6 +21,7 @@
 #define TURBIDITY 1.0
 
 
+
 typedef struct {
   short int r,g,b;
 } ScreenColor;
@@ -88,7 +89,7 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
   Vec3_d attenuation;
   /*placeholder for emission debuggin* */
   Vec3_d emi_dbg = vec3d_from_float(0.0);
-
+  
   bool check_w = check_world_hits(world, r, _inv, rec, &attenuation, &scattered, &emi_dbg); 
 
   if (check_w) {

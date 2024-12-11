@@ -6,11 +6,11 @@
 #include "texture.h"
 #include "vec.h"
 #ifndef SAMPLES_PER_PIXEL
-#define SAMPLES_PER_PIXEL 80 
+#define SAMPLES_PER_PIXEL 10 
 #endif
 
 #ifndef RAY_MAX_DEPTH
-#define RAY_MAX_DEPTH 20 
+#define RAY_MAX_DEPTH 10 
 #endif
 
 int main() {
