@@ -23,7 +23,8 @@ HitableList *init_hit_record_list(size_t initial_capacity) {
 }
 
 bool check_world_hits(HitableList *world, Ray r, Interval interval,
-                      HitRecord *hit_rec, Vec3_d *attenuation, Ray *scattered) {
+                      HitRecord *hit_rec, Vec3_d *attenuation, Ray *scattered, 
+                      Vec3_d *emission_value) {
   bool hit_anything = false;
   double closest_so_far = interval.max;
   for (size_t i = 0; i < world->size; i++) {
@@ -33,7 +34,7 @@ bool check_world_hits(HitableList *world, Ray r, Interval interval,
       hit_anything = true;
       closest_so_far = hit_rec->t;
       determine_material_scatter(_sph->sphere_mat, r, hit_rec, attenuation,
-                                 scattered);
+                                 scattered, emission_value);
     }
   }
   return hit_anything;

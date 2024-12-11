@@ -7,6 +7,7 @@
 
 // image textures are for later
 typedef enum {
+  RGB_TEXTURE,
   CHECKER_TEXTURE,
   IMAGE_TEXTURE
 } TextureType;

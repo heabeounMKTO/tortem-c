@@ -34,7 +34,7 @@ static SDL_Texture* texture = NULL;
 typedef struct {
   int width, height;
   double focus_distance,viewport_height,vfov, defocus_angle;
-  Vec3_d camera_center, v_up, look_from, look_at, background_color; //Camera origin
+  Vec3_d camera_center, v_up, look_from, look_at; //Camera origin
 } CameraSettings ;
 
 
@@ -250,7 +250,10 @@ static inline int render_threaded(CameraSettings* cam, HitableList* world,
         fprintf(stderr, "Failed to allocate memory for image buffer\n");
         return 1;
   }
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STATIC, cam->width, cam->height);
+  texture = SDL_CreateTexture(renderer, 
+                              SDL_PIXELFORMAT_RGB24, 
+                              SDL_TEXTUREACCESS_STATIC, 
+                              cam->width, cam->height);
   if (texture == NULL) {
     fprintf(stderr, "Texture could not be created! SDL_Error: %s\n", SDL_GetError());
     free(IMAGE_BUFFER);

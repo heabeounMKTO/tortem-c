@@ -84,11 +84,12 @@ static inline Material new_dialectric_mat(Vec3_d color, double ior) {
 
 void determine_material_scatter(Material mat, const Ray r_in,
                                 const HitRecord *rec,
-                                Vec3_d* attenuation, Ray* scattered); 
+                                Vec3_d* attenuation, Ray* scattered, Vec3_d* emission_value); 
 
 
 /// adds  texture to materials
-/// not sure if i  should add it to dialetrics 
+///
+/// not sure if i  should add it to dialetrics, 
 /// i should add checking whether or not there is already 
 /// a material present but idk (foreshadowing perhaps)
 static inline void mat_add_tex(Material* input_material, Texture* input_texture) {
@@ -101,9 +102,14 @@ static inline void mat_add_tex(Material* input_material, Texture* input_texture)
   }
 }
 
-
-static inline void mat_emitted(const Material* input_material) {
-
+/// emit white light , if enable
+///
+/// TODO: add suppourt for emissive textures.
+static inline void mat_emit_enable(Material* input_material) {
+  if (input_material->lambert.emission.is_on == false) {
+    input_material->lambert.emission.is_on = true; 
+    input_material->lambert.emission.emission_color = vec3d_from_float(1.0);
+  } 
 }
 
 

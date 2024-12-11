@@ -74,6 +74,11 @@ static inline Vec3_d calculate_sky_color(Vec3_d ray_dir, Vec3_d sun_dir) {
 }
 */
 static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
+  Vec3_d unit_dir = vec3d_unit(r.direction);
+  double a = 0.5 * (vec3d_y(unit_dir) + 1.0);
+  Vec3_d bg_color = vec3d_mul(vec3d_from_float(1.0 - a), vec3d_new(1.0, 1.0, 1.0)); 
+  bg_color = vec3d_add(bg_color, vec3d_mul(vec3d_from_float(a), vec3d_new(0.5, 0.7, 1.0)));
+
   if (depth <= 0) {
     return vec3d_from_float(0.0);
   }
@@ -81,11 +86,16 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
   Interval _inv = interval_new(0.001, INFINITY);
   Ray scattered;
   Vec3_d attenuation;
-  bool check_w = check_world_hits(world, r, _inv, rec, &attenuation, &scattered); 
+  /*placeholder for emission debuggin* */
+  Vec3_d emi_dbg = vec3d_from_float(0.0);
+
+  bool check_w = check_world_hits(world, r, _inv, rec, &attenuation, &scattered, &emi_dbg); 
 
   if (check_w) {
     Vec3_d temp_raycol = ray_color(scattered, world, depth-1);
     Vec3_d final =vec3d_mul(temp_raycol, attenuation);
+    final = vec3d_add(emi_dbg, final);
+    
     // printf("FINAL COLOR HIT:");
     // vec3d_print(final);
     free_hit_record(rec);
@@ -93,13 +103,15 @@ static inline Vec3_d ray_color(const Ray r, HitableList* world, int depth) {
   }
   else {
     free_hit_record(rec);
-    Vec3_d unit_dir = vec3d_unit(r.direction);
-    double a = 0.5 * (vec3d_y(unit_dir) + 1.0);
-    Vec3_d final_color = vec3d_mul(vec3d_from_float(1.0 - a), vec3d_new(1.0, 1.0, 1.0)); 
-    final_color = vec3d_add(final_color, vec3d_mul(vec3d_from_float(a), vec3d_new(0.5, 0.7, 1.0)));
-   // Vec3_d sun_dir = vec3d_unit(vec3d_new(0.0, 1.0, 1.0));
-   //  Vec3_d final_color = calculate_sky_color(unit_dir, sun_dir);
-    return final_color;
+    // Vec3_d unit_dir = vec3d_unit(r.direction);
+    // double a = 0.5 * (vec3d_y(unit_dir) + 1.0);
+    // Vec3_d final_color = vec3d_mul(vec3d_from_float(1.0 - a), vec3d_new(1.0, 1.0, 1.0)); 
+    // final_color = vec3d_add(final_color, vec3d_mul(vec3d_from_float(a), vec3d_new(0.5, 0.7, 1.0)));
+    return vec3d_from_float(0.0);
+    
+    /*bypass lighting implementation by returning black*/
+    // Vec3_d final_color = vec3d_from_float(0.0);
+    // return final_color;
   }
 }
 

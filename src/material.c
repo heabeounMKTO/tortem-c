@@ -1,4 +1,5 @@
 #include "material.h"
+#include "lights.h"
 #include "ray.h"
 #include "texture.h"
 #include "utils.h"
@@ -8,7 +9,8 @@ void determine_material_scatter(Material mat,
                                 const Ray r_in,
                                 const HitRecord *rec, 
                                 Vec3_d *attenuation,
-                                Ray *scattered) {
+                                Ray *scattered,
+                                Vec3_d *emission_value) {
   if (mat.metal.mat_type == METAL) {
   
     Vec3_d metal_scatter_dir = vec3d_reflect(r_in.direction, rec->normal);
@@ -39,6 +41,19 @@ void determine_material_scatter(Material mat,
       if (mat.lambert.tex->checker.texture_type == CHECKER_TEXTURE) {
         *attenuation = checker_texture_determine_color(rec->u, rec->v, mat.lambert.tex->checker , rec->p); 
       }
+    }
+    
+    if (mat.lambert.emission.is_on == true) {
+      if (mat.lambert.tex->checker.texture_type == CHECKER_TEXTURE) {
+        Vec3_d col_a = vec3d_from_float(0.0);
+        emission_color_from_texture(rec->u,rec->v,  mat.lambert.tex , rec->p, &col_a);
+        *emission_value = vec3d_scale(col_a, 2.0); 
+      } else {
+        *emission_value = vec3d_from_float(1.0);
+      }
+      // printf("--------emi_dbg-----------\n");
+      // vec3d_print(emission_value);
+      // printf("--------------------------\n");
     }
   }
 

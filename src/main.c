@@ -6,11 +6,11 @@
 #include "texture.h"
 #include "vec.h"
 #ifndef SAMPLES_PER_PIXEL
-#define SAMPLES_PER_PIXEL 10 
+#define SAMPLES_PER_PIXEL 80 
 #endif
 
 #ifndef RAY_MAX_DEPTH
-#define RAY_MAX_DEPTH 10 
+#define RAY_MAX_DEPTH 20 
 #endif
 
 int main() {
@@ -23,7 +23,8 @@ int main() {
   Material sphere_m_test2 = new_lambert_mat(vec3d_new(0.5, 0.7, 0.9));
 
   mat_add_tex(&sphere_m_test2, &text_checker);
-  
+  mat_emit_enable(&sphere_m_test2); 
+
   Material sphere_m_fuzz = new_metal_mat(vec3d_new(0.65, 0.9, 0.9), 0.45);
   Material sphere_m_fuzz2 = new_metal_mat(vec3d_new(0.95, 0.95, 0.95), 0.0);
   Material sphere_m_glass = new_dialectric_mat(vec3d_new(1.0, 1.0, 1.0), 1.5);
